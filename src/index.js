@@ -79,7 +79,7 @@ const authenticate = async (req, res, next) => {
   }
 };
 
-mongoose.connect('mongodb://localhost/flystr');
+mongoose.connect('mongodb://localhost/flystr', { useMongoClient: true });
 
 app.post('/user/login', login, (req, res) => res.status(200).json(req.user));
 
