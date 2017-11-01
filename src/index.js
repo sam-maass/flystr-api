@@ -24,12 +24,17 @@ app.use(function(req, res, next) {
   next();
 });
 
-mongoose.connect('mongodb://localhost/flystr', { useMongoClient: true });
+mongoose.Promise = global.Promise;
+mongoose
+  .connect('mongodb://localhost/flystr', { useMongoClient: true })
+  .catch(e => console.error(e));
 
 app.post('/user/signup', validateToken, UserController.signup);
 app.post('/user/login', validateToken, UserController.login);
 app.post('/user/logout', authenticate, UserController.logout);
 app.get('/user/profile', authenticate, UserController.getOwnProfile);
 app.post('/trip', authenticate, TripController.insert);
+app.get('/trip', authenticate, TripController.getUserTrips);
 
 app.listen(3000);
+console.log('API running on port 3000');

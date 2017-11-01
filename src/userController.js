@@ -2,8 +2,6 @@ const UserModel = require('./userModel');
 
 module.exports = {
   getOwnProfile: async (req, res, next) => {
-    console.log(req.user);
-
     const profile = await UserModel.findById(req.user._id);
     res.status(200).json(profile);
   },
