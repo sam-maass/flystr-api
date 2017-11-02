@@ -5,7 +5,12 @@ module.exports = {
   insert: async (req, res, next) => {
     const user = await UserModel.findById(req.user._id);
     if (user) {
-      const trip = new TripModel({ ...req.body, user, created: new Date() });
+      const trip = new TripModel({
+        ...req.body,
+        user,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      });
       await trip.save();
       res.status(200).json(trip);
     } else {
