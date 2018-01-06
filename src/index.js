@@ -1,11 +1,15 @@
 var bodyParser = require('body-parser');
 var express = require('express');
 var morgan = require('morgan');
+var mongoose = require('mongoose');
+
 var UserModel = require('./userModel');
 var UserController = require('./userController');
 var TripController = require('./tripController');
-var mongoose = require('mongoose');
 var { authenticate, validateToken } = require('./authMiddleware');
+
+var PORT = process.env.PORT;
+var MONGO_URL = process.env.MONGO_URL;
 
 var app = express();
 app.use(morgan('combined'));
@@ -26,7 +30,7 @@ app.use(function(req, res, next) {
 
 mongoose.Promise = global.Promise;
 mongoose
-  .connect('mongodb://localhost/flystr', { useMongoClient: true })
+  .connect(MONGO_URL, { useMongoClient: true })
   .catch(e => console.error(e));
 
 app.post('/user/signup', validateToken, UserController.signup);
@@ -36,5 +40,5 @@ app.get('/user/profile', authenticate, UserController.getOwnProfile);
 app.post('/trip', authenticate, TripController.insert);
 app.get('/trip', authenticate, TripController.getUserTrips);
 
-app.listen(3000);
+app.listen(PORT);
 console.log('API running on port 3000');
