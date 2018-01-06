@@ -53,7 +53,9 @@ jobs:
           docker_layer_caching: true
 
       - run: docker build -t flystr .
-      - run: docker save -o test flystr
+      - run: docker save -o flystr_image flystr
+      - run: scp flystr_image root@207.154.254.98:~/flystr_image
+      - run: ssh root@207.154.254.98 -- docker load < flystr_image docker-compose up
 
 workflows:
   version: 2
