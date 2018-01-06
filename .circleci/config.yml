@@ -55,7 +55,7 @@ jobs:
       - run: docker save -o flystr_image flystr
       - run: scp -o StrictHostKeyChecking=no flystr_image root@207.154.254.98:~/flystr_image
       - run: ssh -o StrictHostKeyChecking=no  root@207.154.254.98 -- docker load -i flystr_image
-      - run: ssh -o StrictHostKeyChecking=no  root@207.154.254.98 -- docker-compose up
+      - run: ssh -o StrictHostKeyChecking=no  root@207.154.254.98 -- docker-compose up -d
 
 workflows:
   version: 2
