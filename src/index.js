@@ -3,9 +3,9 @@ var express = require('express');
 var morgan = require('morgan');
 var mongoose = require('mongoose');
 
-var UserModel = require('./userModel');
-var UserController = require('./userController');
-var TripController = require('./tripController');
+var UserController = require('./controller/userController');
+var TripController = require('./controller/tripController');
+var DealController = require('./controller/dealController');
 var { authenticate, validateToken } = require('./authMiddleware');
 
 var PORT = process.env.PORT;
@@ -39,6 +39,7 @@ app.post('/user/logout', authenticate, UserController.logout);
 app.get('/user/profile', authenticate, UserController.getOwnProfile);
 app.post('/trip', authenticate, TripController.insert);
 app.get('/trip', authenticate, TripController.getUserTrips);
+app.post('/deal', authenticate, DealController.insert);
 
 app.listen(PORT);
 console.log(`API running on port ${PORT}`);
