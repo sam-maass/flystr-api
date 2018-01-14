@@ -15,12 +15,14 @@ module.exports = {
         updatedAt: new Date()
       });
       await deal.save();
+      const tripsQuery = {
+        budget: { $gte: deal.price },
+        origins: { $in: deal.origins },
+        destinations: { $in: deal.destinations }
+      };
+
       TripModel.updateMany(
-        {
-          budget: { $gte: deal.price },
-          origins: { $in: deal.origins },
-          destinations: { $in: deal.destinations }
-        },
+        tripsQuery,
         {
           $push: { matchingDeals: deal }
         },
