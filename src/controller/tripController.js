@@ -1,5 +1,5 @@
-const TripModel = require('./tripModel');
-const UserModel = require('./userModel');
+const TripModel = require('../model/tripModel');
+const UserModel = require('../model/userModel');
 
 module.exports = {
   insert: async (req, res, next) => {

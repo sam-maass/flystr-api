@@ -1,5 +1,5 @@
 var googleJWT = require('./googleAuthJWT');
-var UserModel = require('./userModel');
+var UserModel = require('./model/userModel');
 
 const authenticate = async (req, res, next) => {
   var authToken = req.get('authorization');
