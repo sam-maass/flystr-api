@@ -3,6 +3,11 @@ const TripModel = require('../model/tripModel');
 const UserModel = require('../model/userModel');
 
 module.exports = {
+  get: async (req, res, next) => {
+    const deals = await DealModel.find({ _id: { $in: req.query.ids } });
+    res.status(200).json(deals);
+  },
+
   insert: async (req, res, next) => {
     const user = await UserModel.findById(req.user._id);
     if (user) {
