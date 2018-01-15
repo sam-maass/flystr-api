@@ -41,6 +41,7 @@ app.post('/trip', authenticate, TripController.insert);
 app.get('/trip', authenticate, TripController.getUserTrips);
 app.post('/deal', authenticate, DealController.insert);
 app.get('/deal', authenticate, DealController.get);
+app.get('/deal/all', authenticate, DealController.getAll);
 
 app.listen(PORT);
 console.log(`API running on port ${PORT}`);

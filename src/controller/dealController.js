@@ -7,6 +7,11 @@ module.exports = {
     const deals = await DealModel.find({ _id: { $in: req.query.ids } });
     res.status(200).json(deals);
   },
+  getAll: async (req, res, next) => {
+    const trips = await TripModel.distinct('matchingDeals');
+    const deals = await DealModel.find({ _id: { $in: trips } });
+    res.status(200).json(deals);
+  },
 
   insert: async (req, res, next) => {
     const user = await UserModel.findById(req.user._id);
