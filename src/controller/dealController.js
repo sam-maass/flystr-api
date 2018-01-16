@@ -8,8 +8,12 @@ module.exports = {
     res.status(200).json(deals);
   },
   getAll: async (req, res, next) => {
-    const trips = await TripModel.distinct('matchingDeals');
-    const deals = await DealModel.find({ _id: { $in: trips } });
+    const trips = await TripModel.find({ user: req.user._id }).distinct(
+      'matchingDeals'
+    );
+    const deals = await DealModel.find({
+      _id: { $in: trips }
+    });
     res.status(200).json(deals);
   },
 
