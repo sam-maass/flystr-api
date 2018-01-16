@@ -26,13 +26,15 @@ module.exports = {
   },
 
   signup: async (req, res, next) => {
-    const exisitingUser = await UserModel.findOneAndUpdate({
-      googleId: payload.sub
+    const exisitingUser = await UserModel.findOne({
+      googleId: req.user.googleId
     });
-    if (!exisitingUser) {
+    if (exisitingUser) {
+      res.status(500).json({ error: 'User already exists' });
+    } else {
       user = new UserModel({ ...req.user, created: new Date() });
       user.save();
+      res.status(200).json(user);
     }
-    res.status(200).json(user);
   }
 };
