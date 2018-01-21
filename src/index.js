@@ -37,8 +37,10 @@ app.post('/user/signup', validateToken, UserController.signup);
 app.post('/user/login', validateToken, UserController.login);
 app.post('/user/logout', authenticate, UserController.logout);
 app.get('/user/profile', authenticate, UserController.getOwnProfile);
+
 app.post('/trip', authenticate, TripController.insert);
 app.get('/trip', authenticate, TripController.getUserTrips);
+
 app.post('/deal', authenticate, DealController.insert);
 app.get('/deal', authenticate, DealController.get);
 app.get('/deal/all', authenticate, DealController.getAll);
