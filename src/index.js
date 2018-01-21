@@ -19,7 +19,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header(
     'Access-Control-Allow-Headers',
@@ -30,7 +30,7 @@ app.use(function(req, res, next) {
 
 mongoose.Promise = global.Promise;
 mongoose
-  .connect(MONGO_URL, { useMongoClient: true })
+  .connect(MONGO_URL)
   .catch(e => console.error(e));
 
 app.post('/user/signup', validateToken, UserController.signup);
