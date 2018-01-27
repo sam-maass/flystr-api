@@ -7,6 +7,7 @@ const tripSchema = new Schema({
   matchingDeals: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Deal' }],
   destinations: [String],
   origins: [String],
+  name: String,
   duration: Number,
   startDate: Date,
   endDate: Date,
