@@ -34,6 +34,7 @@ mongoose
   .catch(e => console.error(e));
 
 app.post('/user/signup', validateToken, UserController.signup);
+app.post('/user/save-subscription', validateToken, UserController.savePushSubscription);
 app.post('/user/login', validateToken, UserController.login);
 app.post('/user/logout', authenticate, UserController.logout);
 app.get('/user/profile', authenticate, UserController.getOwnProfile);

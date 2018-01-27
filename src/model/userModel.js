@@ -13,7 +13,15 @@ const userSchema = new Schema({
   googleProfile: Object,
   email: String,
   created: Date,
-  lastLogin: Date
+  lastLogin: Date,
+  pushSubscription: {
+    endpoint: String,
+    expirationTime: String,
+    keys: {
+      p256dh: String,
+      auth: String
+    }
+  }
 });
 
 const UserModel = mongoose.model('user', userSchema);
