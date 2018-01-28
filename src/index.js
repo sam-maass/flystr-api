@@ -6,6 +6,7 @@ var mongoose = require('mongoose');
 var UserController = require('./controller/userController');
 var TripController = require('./controller/tripController');
 var DealController = require('./controller/dealController');
+var AirportController = require('./controller/airportController');
 var { authenticate, validateToken } = require('./authMiddleware');
 
 var PORT = process.env.PORT;
@@ -45,5 +46,6 @@ app.post('/deal', authenticate, DealController.insert);
 app.get('/deal', authenticate, DealController.get);
 app.get('/deal/all', authenticate, DealController.getAll);
 
+app.get('/airports', authenticate, AirportController.getSuggestions);
 app.listen(PORT);
 console.log(`API running on port ${PORT}`);
