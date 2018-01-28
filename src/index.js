@@ -46,6 +46,6 @@ app.post('/deal', authenticate, DealController.insert);
 app.get('/deal', authenticate, DealController.get);
 app.get('/deal/all', authenticate, DealController.getAll);
 
-app.get('/airports', authenticate, AirportController.getSuggestions); //Test
-app.listen(PORT);
+app.get('/airports', authenticate, AirportController.getSuggestions);
+app.listen(PORT)
 console.log(`API running on port ${PORT}`);
