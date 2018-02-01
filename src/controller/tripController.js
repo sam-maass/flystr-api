@@ -48,5 +48,16 @@ module.exports = {
     } else {
       res.status(500).json({ error: 'Unable to find user' });
     }
+  },
+
+  getUserTripWithDeals: async (req, res, next) => {
+    const tripId = req.params.tripId;
+    const user = await UserModel.findById(req.user._id);
+    if (user) {
+      const trips = await TripModel.find({ _id: tripId, user: req.user._id, matchingDeals: { $ne: [] } }).populate('matchingDeals');
+      res.status(200).json(trips)
+    } else
+      res.status(500).json({ error: 'Unable to find user' });
   }
-};
+}
+
