@@ -17,6 +17,6 @@ const airportSchema = new Schema({
   "tz": String
 });
 
-const AirportModel = mongoose.model('airport', airportSchema);
+const AirportModel = mongoose.model('Airport', airportSchema);
 
 module.exports = AirportModel;

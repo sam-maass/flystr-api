@@ -14,6 +14,6 @@ const dealSchema = new Schema({
   updatedAt: Date
 });
 
-const DealModel = mongoose.model('deal', dealSchema);
+const DealModel = mongoose.model('Deal', dealSchema);
 
 module.exports = DealModel;
