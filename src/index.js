@@ -41,6 +41,7 @@ app.get('/user/profile', authenticate, UserController.getOwnProfile);
 
 app.post('/trip', authenticate, TripController.insert);
 app.get('/trip', authenticate, TripController.getUserTrips);
+app.get('/trip/deals', authenticate, TripController.getUserTripsWithDeals);
 
 app.post('/deal', authenticate, DealController.insert);
 app.get('/deal', authenticate, DealController.get);
