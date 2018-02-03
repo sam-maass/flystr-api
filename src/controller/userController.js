@@ -1,9 +1,11 @@
 const UserModel = require('../model/userModel');
+const TripModel = require('../model/tripModel');
 
 module.exports = {
   getOwnProfile: async (req, res, next) => {
-    const profile = await UserModel.findById(req.user._id);
-    res.status(200).json(profile);
+    const user = await UserModel.findById(req.user._id);
+    const trips = await TripModel.find({ user: req.user._id }).populate('matchingDeals');
+    res.status(200).json({ user, trips });
   },
 
   logout: async (req, res, next) => {

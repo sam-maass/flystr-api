@@ -39,14 +39,10 @@ app.post('/user/login', validateToken, UserController.login);
 app.post('/user/logout', authenticate, UserController.logout);
 app.get('/user/profile', authenticate, UserController.getOwnProfile);
 
-app.post('/trip', authenticate, TripController.insert);
-app.get('/trip', authenticate, TripController.getUserTrips);
-app.get('/trip/deals', authenticate, TripController.getUserTripsWithDeals);
-app.get('/trip/:tripId/deals', authenticate, TripController.getUserTripWithDeals);
+app.post('/trips', authenticate, TripController.insert);
+app.get('/trips', authenticate, TripController.getUserTripsWithDeals);
 
 app.post('/deal', authenticate, DealController.insert);
-app.get('/deal', authenticate, DealController.get);
-app.get('/deal/all', authenticate, DealController.getAll);
 
 app.get('/airports', authenticate, AirportController.getSuggestions);
 app.listen(PORT)
