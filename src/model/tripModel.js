@@ -8,12 +8,13 @@ const tripSchema = new Schema({
   destinations: [String],
   origins: [String],
   name: String,
-  duration: Number,
   startDate: Date,
   endDate: Date,
   budget: Number,
   createdAt: Date,
-  updatedAt: Date
+  updatedAt: Date,
+  fromDuration: Number,
+  toDuration: Number
 });
 
 const TripModel = mongoose.model('Trip', tripSchema);
