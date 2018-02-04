@@ -1,9 +1,9 @@
-var googleJWT = require('./googleAuthJWT');
-var UserModel = require('./model/userModel');
+const googleJWT = require('./googleAuthJWT');
+const UserModel = require('./model/userModel');
 
 const authenticate = async (req, res, next) => {
-  var authToken = req.get('authorization');
-  let user = await UserModel.findOne({
+  const authToken = req.get('authorization');
+  const user = await UserModel.findOne({
     'activeJWT.id': authToken,
     'activeJWT.exp': { $gt: Date.now() / 1000 }
   });
@@ -16,7 +16,7 @@ const authenticate = async (req, res, next) => {
 };
 
 const validateToken = async (req, res, next) => {
-  var token = req.get('authorization');
+  const token = req.get('authorization');
 
   // TODO: figure out how to verify token (Google, FB, Twitter, ...)
   const payload = await googleJWT.verifyToken(token);
