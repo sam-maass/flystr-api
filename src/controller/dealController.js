@@ -22,8 +22,6 @@ module.exports = {
     if (user) {
       const deal = new DealModel({
         ...req.body,
-        destinations: req.body.destinations.split(','),
-        origins: req.body.origins.split(','),
         user,
         createdAt: new Date(),
         updatedAt: new Date()

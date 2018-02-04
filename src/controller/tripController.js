@@ -6,19 +6,15 @@ module.exports = {
   insert: async (req, res) => {
     const user = await UserModel.findById(req.user._id);
     const { budget, origins, destinations } = req.body;
-    const originsArr = origins.split(',');
-    const destinationsArr = destinations.split(',');
     const tripsQuery = {
       price: { $lte: budget },
-      origins: { $in: originsArr },
-      destinations: { $in: destinationsArr }
+      origins: { $in: origins },
+      destinations: { $in: destinations }
     };
     const matchingDeals = await DealModel.find(tripsQuery);
     if (user) {
       const trip = new TripModel({
         ...req.body,
-        destinations,
-        origins,
         user,
         createdAt: new Date(),
         updatedAt: new Date(),
@@ -30,6 +26,19 @@ module.exports = {
       res.status(500).json({ error: 'Unable to save trip' });
     }
   },
+
+  update: async (req, res) => {
+    console.log(req.body);
+    const tripId = req.params.tripId;
+    const trip = await TripModel.updateMany(
+      { _id: tripId },
+      {
+        ...req.body
+      }
+    );
+    res.status(200).json(trip);
+  },
+
   getUserTrips: async (req, res) => {
     const user = await UserModel.findById(req.user._id);
     if (user) {
