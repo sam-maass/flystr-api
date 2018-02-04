@@ -37,6 +37,7 @@ app.post('/user/login', validateToken, UserController.login);
 app.post('/user/logout', authenticate, UserController.logout);
 app.get('/user/profile', authenticate, UserController.getOwnProfile);
 
+app.post('/trips/:tripId', authenticate, TripController.update);
 app.post('/trips', authenticate, TripController.insert);
 app.get('/trips', authenticate, TripController.getUserTripsWithDeals);
 
