@@ -4,9 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "lint": "eslint --fix 'src/**/*.js'",
+    "format": "prettier --write 'src/**/*.js'",
     "start": "export $(cat .env | xargs) && nodemon src/index.js",
     "build": "node src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 0"
+    "test": "echo \"Error: no test specified\" && exit 0",
+    "precommit": "lint-staged"
   },
   "author": "",
   "license": "ISC",
@@ -22,5 +25,16 @@
     "nodemon": "^1.12.1",
     "passport": "^0.4.0",
     "passport-google-oauth": "^1.0.0"
+  },
+  "lint-staged": {
+    "src/**/*.{js,json,css,md}": ["prettier --write", "git add"],
+    "src/**/*.{js,json}": ["eslint --fix", "git add"]
+  },
+  "devDependencies": {
+    "babel-eslint": "^8.2.1",
+    "eslint": "^4.17.0",
+    "husky": "^0.14.3",
+    "lint-staged": "^6.1.0",
+    "prettier": "^1.10.2"
   }
 }

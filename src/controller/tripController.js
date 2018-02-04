@@ -3,15 +3,15 @@ const UserModel = require('../model/userModel');
 const DealModel = require('../model/dealModel');
 
 module.exports = {
-  insert: async (req, res, next) => {
+  insert: async (req, res) => {
     const user = await UserModel.findById(req.user._id);
-    let { budget, origins, destinations } = req.body;
-    origins = origins.split(',');
-    destinations = destinations.split(',');
+    const { budget, origins, destinations } = req.body;
+    const originsArr = origins.split(',');
+    const destinationsArr = destinations.split(',');
     const tripsQuery = {
       price: { $lte: budget },
-      origins: { $in: origins },
-      destinations: { $in: destinations }
+      origins: { $in: originsArr },
+      destinations: { $in: destinationsArr }
     };
     const matchingDeals = await DealModel.find(tripsQuery);
     if (user) {
@@ -30,7 +30,7 @@ module.exports = {
       res.status(500).json({ error: 'Unable to save trip' });
     }
   },
-  getUserTrips: async (req, res, next) => {
+  getUserTrips: async (req, res) => {
     const user = await UserModel.findById(req.user._id);
     if (user) {
       const trips = await TripModel.find({ user: req.user._id });
@@ -40,24 +40,29 @@ module.exports = {
     }
   },
 
-  getUserTripsWithDeals: async (req, res, next) => {
+  getUserTripsWithDeals: async (req, res) => {
     const user = await UserModel.findById(req.user._id);
     if (user) {
-      const trips = await TripModel.find({ user: req.user._id, matchingDeals: { $ne: [] } }).populate('matchingDeals');
-      res.status(200).json(trips)
+      const trips = await TripModel.find({
+        user: req.user._id,
+        matchingDeals: { $ne: [] }
+      }).populate('matchingDeals');
+      res.status(200).json(trips);
     } else {
       res.status(500).json({ error: 'Unable to find user' });
     }
   },
 
-  getUserTripWithDeals: async (req, res, next) => {
+  getUserTripWithDeals: async (req, res) => {
     const tripId = req.params.tripId;
     const user = await UserModel.findById(req.user._id);
     if (user) {
-      const trips = await TripModel.find({ _id: tripId, user: req.user._id, matchingDeals: { $ne: [] } }).populate('matchingDeals');
-      res.status(200).json(trips)
-    } else
-      res.status(500).json({ error: 'Unable to find user' });
+      const trips = await TripModel.find({
+        _id: tripId,
+        user: req.user._id,
+        matchingDeals: { $ne: [] }
+      }).populate('matchingDeals');
+      res.status(200).json(trips);
+    } else res.status(500).json({ error: 'Unable to find user' });
   }
-}
-
+};

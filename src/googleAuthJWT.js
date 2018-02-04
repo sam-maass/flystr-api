@@ -1,7 +1,6 @@
-var CLIENT_ID =
+const CLIENT_ID =
   '1059931024943-1u64m1fh6glpodhalllbkbul1hbsdbfh.apps.googleusercontent.com';
 const gal = require('google-auth-library');
-const auth = new gal.GoogleAuth();
 const client = new gal.OAuth2Client(CLIENT_ID, '', '');
 
 const verifyToken = token => {
@@ -11,10 +10,9 @@ const verifyToken = token => {
         idToken: token,
         audience: CLIENT_ID
       },
-      function(e, login) {
+      (e, login) => {
         if (!login) return reject(new Error('JWT not verified'));
-        var payload = login.getPayload();
-        var userid = payload['sub'];
+        const payload = login.getPayload();
         resolve(payload);
         // If request specified a G Suite domain:
         //var domain = payload['hd'];

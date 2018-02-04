@@ -3,11 +3,11 @@ const TripModel = require('../model/tripModel');
 const UserModel = require('../model/userModel');
 
 module.exports = {
-  get: async (req, res, next) => {
+  get: async (req, res) => {
     const deals = await DealModel.find({ _id: { $in: req.query.ids } });
     res.status(200).json(deals);
   },
-  getAll: async (req, res, next) => {
+  getAll: async (req, res) => {
     const trips = await TripModel.find({ user: req.user._id }).distinct(
       'matchingDeals'
     );
@@ -17,7 +17,7 @@ module.exports = {
     res.status(200).json(deals);
   },
 
-  insert: async (req, res, next) => {
+  insert: async (req, res) => {
     const user = await UserModel.findById(req.user._id);
     if (user) {
       const deal = new DealModel({
@@ -40,8 +40,8 @@ module.exports = {
         {
           $push: { matchingDeals: deal }
         },
-        function(err, raw) {
-          if (err) return handleError(err);
+        err => {
+          if (err) return console.log(err);
         }
       );
       res.status(200).json(deal);

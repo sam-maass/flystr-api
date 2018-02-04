@@ -1,18 +1,18 @@
-var bodyParser = require('body-parser');
-var express = require('express');
-var morgan = require('morgan');
-var mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const express = require('express');
+const morgan = require('morgan');
+const mongoose = require('mongoose');
 
-var UserController = require('./controller/userController');
-var TripController = require('./controller/tripController');
-var DealController = require('./controller/dealController');
-var AirportController = require('./controller/airportController');
-var { authenticate, validateToken } = require('./authMiddleware');
+const UserController = require('./controller/userController');
+const TripController = require('./controller/tripController');
+const DealController = require('./controller/dealController');
+const AirportController = require('./controller/airportController');
+const { authenticate, validateToken } = require('./authMiddleware');
 
-var PORT = process.env.PORT;
-var MONGO_URL = process.env.MONGO_URL;
+const PORT = process.env.PORT;
+const MONGO_URL = process.env.MONGO_URL;
 
-var app = express();
+const app = express();
 app.use(morgan('combined'));
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -20,7 +20,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
-app.use(function (req, res, next) {
+app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header(
     'Access-Control-Allow-Headers',
@@ -30,9 +30,7 @@ app.use(function (req, res, next) {
 });
 
 mongoose.Promise = global.Promise;
-mongoose
-  .connect(MONGO_URL)
-  .catch(e => console.error(e));
+mongoose.connect(MONGO_URL).catch(e => console.error(e));
 
 app.post('/user/signup', validateToken, UserController.signup);
 app.post('/user/login', validateToken, UserController.login);
@@ -45,5 +43,5 @@ app.get('/trips', authenticate, TripController.getUserTripsWithDeals);
 app.post('/deal', authenticate, DealController.insert);
 
 app.get('/airports', authenticate, AirportController.getSuggestions);
-app.listen(PORT)
+app.listen(PORT);
 console.log(`API running on port ${PORT}`);
