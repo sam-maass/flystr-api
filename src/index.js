@@ -7,6 +7,7 @@ const UserController = require('./controller/userController');
 const TripController = require('./controller/tripController');
 const DealController = require('./controller/dealController');
 const AirportController = require('./controller/airportController');
+const LaunchEmailController = require('./controller/launchEmailController');
 const { authenticate, validateToken } = require('./authMiddleware');
 
 const PORT = process.env.PORT;
@@ -44,5 +45,6 @@ app.get('/trips', authenticate, TripController.getUserTripsWithDeals);
 app.post('/deal', authenticate, DealController.insert);
 
 app.get('/airports', authenticate, AirportController.getSuggestions);
+app.post('/launchSignup', LaunchEmailController.save);
 app.listen(PORT);
 console.log(`API running on port ${PORT}`);
