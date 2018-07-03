@@ -1,4 +1,5 @@
 const LaunchEmailModel = require('../model/launchEmailModel');
+const mail = require('../sendMail');
 
 module.exports = {
   save: async (req, res) => {
@@ -16,6 +17,7 @@ module.exports = {
         createdAt: new Date()
       });
       launchEmail.save();
+      mail.sendWelcomeEmail(req.body.email);
       res.status(200).json(launchEmail);
     }
   }
