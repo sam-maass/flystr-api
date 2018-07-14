@@ -34,7 +34,9 @@ mongoose.Promise = global.Promise;
 mongoose.connect(MONGO_URL).catch(e => console.error(e));
 
 app.post('/user/signup', validateToken, UserController.signup);
+app.post('/user/signup-email', UserController.signupWithEmail);
 app.post('/user/login', validateToken, UserController.login);
+app.post('/user/login-email', UserController.loginWithEmail);
 app.post('/user/logout', authenticate, UserController.logout);
 app.get('/user/profile', authenticate, UserController.getOwnProfile);
 
