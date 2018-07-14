@@ -1,14 +1,20 @@
 const googleJWT = require('./googleAuthJWT');
 const UserModel = require('./model/userModel');
+const jwt = require('jsonwebtoken');
 
 const authenticate = async (req, res, next) => {
-  const authToken = req.get('authorization');
+  const token = req.get('authorization');
+  const doc = await jwt.decode(token);
+  console.log(doc.exp, Date.now() / 1000);
+
+  if (doc.exp < Date.now() / 1000) {
+    res.status(401).json({ error: 'JWT expired' });
+  }
   const user = await UserModel.findOne({
-    'activeJWT.id': authToken,
-    'activeJWT.exp': { $gt: Date.now() / 1000 }
+    activeJWT: token
   });
   if (!user) {
-    res.status(401).json({ error: 'Not Authorized' });
+    res.status(401).json({ error: 'JWT unknown' });
   } else {
     req.user = user;
     next();
@@ -25,10 +31,7 @@ const validateToken = async (req, res, next) => {
     res.status(500).json({ error: "Can't verify auth token" });
   } else {
     req.user = {
-      activeJWT: {
-        id: token,
-        exp: payload.exp
-      },
+      activeJWT: token,
       googleId: payload.sub,
       firstName: payload.given_name,
       lastName: payload.family_name,
