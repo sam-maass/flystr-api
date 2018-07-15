@@ -1,0 +1,27 @@
+const express = require('express'),
+  router = express.Router();
+
+const UserController = require('./controller/userController');
+const TripController = require('./controller/tripController');
+const DealController = require('./controller/dealController');
+const AirportController = require('./controller/airportController');
+const LaunchEmailController = require('./controller/launchEmailController');
+const { authenticate, validateToken } = require('./authMiddleware');
+
+router.post('/user/signup', validateToken, UserController.signup);
+router.post('/user/signup-email', UserController.signupWithEmail);
+router.post('/user/login', validateToken, UserController.login);
+router.post('/user/login-email', UserController.loginWithEmail);
+router.post('/user/logout', authenticate, UserController.logout);
+router.get('/user/profile', authenticate, UserController.getProfile);
+
+router.post('/trips/:tripId', authenticate, TripController.update);
+router.post('/trips', authenticate, TripController.insert);
+router.get('/trips', authenticate, TripController.getUserTripsWithDeals);
+
+router.post('/deal', authenticate, DealController.insert);
+
+router.get('/airports', authenticate, AirportController.getSuggestions);
+router.post('/launchSignup', LaunchEmailController.save);
+
+module.exports = router;
