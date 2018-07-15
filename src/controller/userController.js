@@ -22,32 +22,23 @@ module.exports = {
   loginWithEmail: async (req, res) => {
     const user = await UserModel.findOne({ email: req.body.email });
     if (!user) {
-      res.status(500).json({ error: "Can't find user" });
-    }
-    console.log(req.body.password, user.pwHash);
-
-    if (!bcrypt.compareSync(req.body.password, user.pwHash)) {
-      res.status(500).json({ error: 'Invalid Password' });
+      returnError.unknownUser(res);
+    } else if (!bcrypt.compareSync(req.body.password, user.pwHash)) {
+      returnError.invalidPassword;
     } else {
-      user.activeJWT = jwt.sign(
-        {
-          email: req.body.email,
-          exp: Math.floor(Date.now() / 1000) + 60 * 15
-        },
-        process.env.JWT_SECRET
-      );
-      await user.save();
+      await updateJWT(user);
       res.status(200).json(user);
     }
   },
 
   login: async (req, res) => {
-    const user = await UserModel.findOneAndUpdate({
-      activeJWT: req.user.activeJWT
+    const user = await UserModel.findOne({
+      googleId: req.user.googleId
     });
     if (!user) {
-      res.status(500).json({ error: "Can't find user" });
+      returnError.unknownUser(res);
     } else {
+      await updateJWT(user);
       res.status(200).json(user);
     }
   },
@@ -57,10 +48,8 @@ module.exports = {
       googleId: req.user.googleId
     });
     if (exisitingUser) {
-      res.status(500).json({ error: 'User already exists' });
+      returnError.duplicateUser(res);
     } else {
-      console.log(req.user);
-
       const user = new UserModel({ ...req.user, created: new Date() });
       user.save();
       res.status(200).json(user);
@@ -72,22 +61,35 @@ module.exports = {
       email: req.body.email
     });
     if (exisitingUser) {
-      res.status(500).json({ error: 'User already exists' });
+      returnError.duplicateUser(res);
     } else {
       const user = new UserModel({
         email: req.body.email,
         pwHash: await bcrypt.hash(req.body.password, 10),
-        activeJWT: jwt.sign(
-          {
-            email: req.body.email,
-            exp: Math.floor(Date.now() / 1000) + 60 * 15
-          },
-          process.env.JWT_SECRET
-        ),
         created: new Date()
       });
+      await updateJWT(user);
       user.save();
       res.status(200).json(user);
     }
   }
+};
+
+async function updateJWT(user) {
+  user.activeJWT = jwt.sign(
+    {
+      user: {
+        _id: user._id
+      }
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: '15m', issuer: 'flystr' }
+  );
+  await user.save();
+}
+
+const returnError = {
+  duplicateUser: res => res.status(500).json({ error: 'User already exists' }),
+  unknownUser: res => res.status(500).json({ error: 'User unknown' }),
+  invalidPassword: res => res.status(500).json({ error: 'Invalid Password' })
 };
