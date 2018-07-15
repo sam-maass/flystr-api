@@ -1,25 +1,15 @@
 const googleJWT = require('./googleAuthJWT');
-const UserModel = require('./model/userModel');
 const jwt = require('jsonwebtoken');
 
 const authenticate = async (req, res, next) => {
   const token = req.get('authorization');
-  const doc = await jwt.decode(token);
-  if (!doc) {
-    res.status(401).json({ error: 'No token' });
-  }
-  if (doc.exp < Date.now() / 1000) {
-    res.status(401).json({ error: 'Token expired' });
-  }
-  const user = await UserModel.findOne({
-    activeJWT: token
-  });
-  if (!user) {
-    res.status(401).json({ error: 'Token unknown' });
+  if (!token) {
+    return res.status(401).json({ error: 'No token' });
   } else {
+    const { user } = (await decodeToken(token, res)) || {};
     req.user = user;
-    next();
   }
+  next();
 };
 
 const validateToken = async (req, res, next) => {
@@ -44,3 +34,11 @@ const validateToken = async (req, res, next) => {
 };
 
 module.exports = { authenticate, validateToken };
+
+async function decodeToken(token, res) {
+  try {
+    return await jwt.verify(token, process.env.JWT_SECRET);
+  } catch (e) {
+    res.status(401).json({ error: e });
+  }
+}
