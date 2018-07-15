@@ -19,11 +19,11 @@ jobs:
     steps:
       - checkout
       - run: 
-        name: Install Python
-        working_directory: 
-        command:  |
-          apt-get -y -qq update
-          apt-get -y -qq install python3.4-dev
+          name: Install Python
+          working_directory: 
+          command:  |
+            apt-get -y -qq update
+            apt-get -y -qq install python3.4-dev
       # Download and cache dependencies
       - restore_cache:
           keys:
