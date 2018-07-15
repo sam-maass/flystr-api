@@ -22,7 +22,6 @@ const validateToken = async (req, res, next) => {
     res.status(500).json({ error: "Can't verify auth token" });
   } else {
     req.user = {
-      activeJWT: token,
       googleId: payload.sub,
       firstName: payload.given_name,
       lastName: payload.family_name,
