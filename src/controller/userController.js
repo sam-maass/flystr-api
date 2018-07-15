@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 module.exports = {
-  getOwnProfile: async (req, res) => {
+  getProfile: async (req, res) => {
     const user = await UserModel.findById(req.user._id);
     const trips = await TripModel.find({ user: req.user._id }).populate(
       'matchingDeals'

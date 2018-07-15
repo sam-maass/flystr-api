@@ -3,15 +3,7 @@ const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 
-const UserController = require('./controller/userController');
-const TripController = require('./controller/tripController');
-const DealController = require('./controller/dealController');
-const AirportController = require('./controller/airportController');
-const LaunchEmailController = require('./controller/launchEmailController');
-const { authenticate, validateToken } = require('./authMiddleware');
-
-const PORT = process.env.PORT;
-const MONGO_URL = process.env.MONGO_URL;
+const { PORT, MONGO_URL } = process.env;
 
 const app = express();
 app.use(morgan('combined'));
@@ -30,23 +22,10 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(require('./routes'));
+
 mongoose.Promise = global.Promise;
 mongoose.connect(MONGO_URL).catch(e => console.error(e));
 
-app.post('/user/signup', validateToken, UserController.signup);
-app.post('/user/signup-email', UserController.signupWithEmail);
-app.post('/user/login', validateToken, UserController.login);
-app.post('/user/login-email', UserController.loginWithEmail);
-app.post('/user/logout', authenticate, UserController.logout);
-app.get('/user/profile', authenticate, UserController.getOwnProfile);
-
-app.post('/trips/:tripId', authenticate, TripController.update);
-app.post('/trips', authenticate, TripController.insert);
-app.get('/trips', authenticate, TripController.getUserTripsWithDeals);
-
-app.post('/deal', authenticate, DealController.insert);
-
-app.get('/airports', authenticate, AirportController.getSuggestions);
-app.post('/launchSignup', LaunchEmailController.save);
 app.listen(PORT);
-console.log(`API running on port ${PORT}`);
+console.log(`API running on port ${PORT}, mongo connected to ${MONGO_URL}`);
