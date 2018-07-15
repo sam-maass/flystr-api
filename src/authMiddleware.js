@@ -5,16 +5,17 @@ const jwt = require('jsonwebtoken');
 const authenticate = async (req, res, next) => {
   const token = req.get('authorization');
   const doc = await jwt.decode(token);
-  console.log(doc.exp, Date.now() / 1000);
-
+  if (!doc) {
+    res.status(401).json({ error: 'No token' });
+  }
   if (doc.exp < Date.now() / 1000) {
-    res.status(401).json({ error: 'JWT expired' });
+    res.status(401).json({ error: 'Token expired' });
   }
   const user = await UserModel.findOne({
     activeJWT: token
   });
   if (!user) {
-    res.status(401).json({ error: 'JWT unknown' });
+    res.status(401).json({ error: 'Token unknown' });
   } else {
     req.user = user;
     next();
