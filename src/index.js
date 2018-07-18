@@ -25,7 +25,12 @@ app.use((req, res, next) => {
 app.use(require('./routes'));
 
 mongoose.Promise = global.Promise;
-mongoose.connect(MONGO_URL).catch(e => console.error(e));
+mongoose
+  .connect(
+    MONGO_URL,
+    { useNewUrlParser: true }
+  )
+  .catch(e => console.error(e));
 
 app.listen(PORT);
 console.log(`API running on port ${PORT}, mongo connected to ${MONGO_URL}`);
