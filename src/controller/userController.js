@@ -43,6 +43,16 @@ module.exports = {
     }
   },
 
+  refreshToken: async (req, res) => {
+    const user = await UserModel.findById(req.user._id);
+    if (!user) {
+      returnError.unknownUser(res);
+    } else {
+      await updateJWT(user);
+      res.status(200).json(user);
+    }
+  },
+
   signup: async (req, res) => {
     const exisitingUser = await UserModel.findOne({
       googleId: req.user.googleId

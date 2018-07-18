@@ -13,6 +13,7 @@ router.post('/user/signup-email', UserController.signupWithEmail);
 router.post('/user/login', validateToken, UserController.login);
 router.post('/user/login-email', UserController.loginWithEmail);
 router.post('/user/logout', authenticate, UserController.logout);
+router.get('/user/refreshToken', authenticate, UserController.refreshToken);
 router.get('/user/profile', authenticate, UserController.getProfile);
 
 router.post('/trips/:tripId', authenticate, TripController.update);
