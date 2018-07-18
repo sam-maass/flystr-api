@@ -3,13 +3,17 @@ const jwt = require('jsonwebtoken');
 
 const authenticate = async (req, res, next) => {
   const token = req.get('authorization');
+  console.log({ token });
+
   if (!token) {
     return res.status(401).json({ error: 'No token' });
   } else {
-    const { user } = (await decodeToken(token, res)) || {};
-    req.user = user;
+    const { user } = await decodeToken(token, res);
+    if (user) {
+      req.user = user;
+      next();
+    }
   }
-  next();
 };
 
 const validateToken = async (req, res, next) => {
@@ -35,9 +39,11 @@ const validateToken = async (req, res, next) => {
 module.exports = { authenticate, validateToken };
 
 async function decodeToken(token, res) {
+  let decodedToken = {};
   try {
-    return await jwt.verify(token, process.env.JWT_SECRET);
+    decodedToken = await jwt.verify(token, process.env.JWT_SECRET);
   } catch (e) {
     res.status(401).json({ error: e });
   }
+  return decodedToken;
 }
