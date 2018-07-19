@@ -99,7 +99,9 @@ async function updateJWT(user) {
 }
 
 const returnError = {
-  duplicateUser: res => res.status(500).json({ error: 'User already exists' }),
-  unknownUser: res => res.status(500).json({ error: 'User unknown' }),
-  invalidPassword: res => res.status(500).json({ error: 'Invalid Password' })
+  duplicateUser: res => res.status(500).json({ error: 'Email already in use' }),
+  unknownUser: res =>
+    res.status(500).json({ error: 'Email or Password incorrect' }),
+  invalidPassword: res =>
+    res.status(500).json({ error: 'Email or Password incorrect' })
 };
