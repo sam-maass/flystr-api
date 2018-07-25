@@ -24,7 +24,7 @@ module.exports = {
     if (!user) {
       returnError.unknownUser(res);
     } else if (!bcrypt.compareSync(req.body.password, user.pwHash)) {
-      returnError.invalidPassword;
+      returnError.invalidPassword(res);
     } else {
       await updateJWT(user);
       res.status(200).json(user);
