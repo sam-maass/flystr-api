@@ -28,7 +28,6 @@ module.exports = {
   },
 
   update: async (req, res) => {
-    console.log(req.body);
     const tripId = req.params.tripId;
     const trip = await TripModel.updateMany(
       { _id: tripId },
@@ -37,6 +36,17 @@ module.exports = {
       }
     );
     res.status(200).json(trip);
+  },
+
+  delete: async (req, res) => {
+    const tripId = req.params.tripId;
+    const trip = await TripModel.findById(tripId);
+    if (!trip) {
+      res.status(500).json({ error: 'Unable to find trip' });
+    } else {
+      trip.remove();
+      res.status(200).json({ removed: true });
+    }
   },
 
   getUserTrips: async (req, res) => {

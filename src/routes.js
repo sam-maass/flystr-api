@@ -17,6 +17,7 @@ router.get('/user/refreshToken', authenticate, UserController.refreshToken);
 router.get('/user/profile', authenticate, UserController.getProfile);
 
 router.post('/trips/:tripId', authenticate, TripController.update);
+router.delete('/trips/:tripId', authenticate, TripController.delete);
 router.post('/trips', authenticate, TripController.insert);
 router.get('/trips', authenticate, TripController.getUserTripsWithDeals);
 
