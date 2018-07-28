@@ -27,6 +27,7 @@ router.get('/trips', authenticate, TripController.getUserTripsWithDeals);
 router.get('/trips/all', authenticateAdmin, TripController.getAllTrips);
 
 router.post('/deal', authenticate, DealController.insert);
+router.get('/deals', authenticate, DealController.get);
 
 router.get('/airports', authenticate, AirportController.getSuggestions);
 router.post('/launchSignup', LaunchEmailController.save);
