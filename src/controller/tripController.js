@@ -49,6 +49,11 @@ module.exports = {
     }
   },
 
+  getAllTrips: async (req, res) => {
+    const trips = await TripModel.find();
+    res.status(200).json(trips);
+  },
+
   getUserTrips: async (req, res) => {
     const user = await UserModel.findById(req.user._id);
     if (user) {
