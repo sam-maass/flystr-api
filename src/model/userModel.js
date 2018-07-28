@@ -11,7 +11,8 @@ const userSchema = new Schema({
   email: String,
   pwHash: String,
   created: Date,
-  lastLogin: Date
+  lastLogin: Date,
+  isAdmin: Boolean
 });
 
 const UserModel = mongoose.model('User', userSchema);

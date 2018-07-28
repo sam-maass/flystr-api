@@ -86,14 +86,14 @@ module.exports = {
 };
 
 async function updateJWT(user) {
+  const { _id, isAdmin } = user;
   user.activeJWT = jwt.sign(
-    {
-      user: {
-        _id: user._id
-      }
-    },
+    { user: { _id, isAdmin } },
     process.env.JWT_SECRET,
-    { expiresIn: '15m', issuer: 'flystr' }
+    {
+      expiresIn: '15m',
+      issuer: 'flystr'
+    }
   );
   await user.save();
 }

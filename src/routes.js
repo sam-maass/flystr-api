@@ -6,7 +6,11 @@ const TripController = require('./controller/tripController');
 const DealController = require('./controller/dealController');
 const AirportController = require('./controller/airportController');
 const LaunchEmailController = require('./controller/launchEmailController');
-const { authenticate, validateToken } = require('./authMiddleware');
+const {
+  authenticate,
+  validateToken,
+  authenticateAdmin
+} = require('./authMiddleware');
 
 router.post('/user/signup', validateToken, UserController.signup);
 router.post('/user/signup-email', UserController.signupWithEmail);
@@ -20,6 +24,7 @@ router.post('/trips/:tripId', authenticate, TripController.update);
 router.delete('/trips/:tripId', authenticate, TripController.delete);
 router.post('/trips', authenticate, TripController.insert);
 router.get('/trips', authenticate, TripController.getUserTripsWithDeals);
+router.get('/trips/all', authenticateAdmin, TripController.getAllTrips);
 
 router.post('/deal', authenticate, DealController.insert);
 

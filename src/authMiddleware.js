@@ -1,6 +1,22 @@
 const googleJWT = require('./googleAuthJWT');
 const jwt = require('jsonwebtoken');
 
+const authenticateAdmin = async (req, res, next) => {
+  const token = req.get('authorization');
+  if (!token) {
+    return res.status(401).json({ error: 'No token' });
+  } else {
+    const { user } = await decodeToken(token, res);
+
+    if (user.isAdmin) {
+      req.user = user;
+      next();
+    } else {
+      return res.status(401).json({ error: 'Not allowed' });
+    }
+  }
+};
+
 const authenticate = async (req, res, next) => {
   const token = req.get('authorization');
   if (!token) {
@@ -34,7 +50,7 @@ const validateToken = async (req, res, next) => {
   }
 };
 
-module.exports = { authenticate, validateToken };
+module.exports = { authenticate, authenticateAdmin, validateToken };
 
 async function decodeToken(token, res) {
   let decodedToken = {};
