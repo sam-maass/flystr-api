@@ -4,16 +4,7 @@ const UserModel = require('../model/userModel');
 
 module.exports = {
   get: async (req, res) => {
-    const deals = await DealModel.find({ _id: { $in: req.query.ids } });
-    res.status(200).json(deals);
-  },
-  getAll: async (req, res) => {
-    const trips = await TripModel.find({ user: req.user._id }).distinct(
-      'matchingDeals'
-    );
-    const deals = await DealModel.find({
-      _id: { $in: trips }
-    });
+    const deals = await DealModel.find({});
     res.status(200).json(deals);
   },
 
