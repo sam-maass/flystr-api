@@ -7,6 +7,7 @@ const dealSchema = new Schema({
   createdAt: Date,
   updatedAt: Date,
   title: String,
+  subtitle: String,
   minPrice: Number,
   origins: [String],
   destinations: [String],
