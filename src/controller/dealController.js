@@ -8,6 +8,11 @@ module.exports = {
     res.status(200).json(deals);
   },
 
+  getOne: async (req, res) => {
+    const deals = await DealModel.findOne({ _id: req.params.dealId });
+    res.status(200).json(deals);
+  },
+
   insert: async (req, res) => {
     const user = await UserModel.findById(req.user._id);
     if (user) {
