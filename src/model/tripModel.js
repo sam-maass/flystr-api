@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 const tripSchema = new Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  matchingDeals: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Deal' }],
+  matchingFlights: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Flight' }],
   destinations: [String],
   origins: [String],
   name: String,

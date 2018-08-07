@@ -1,24 +1,23 @@
 const TripModel = require('../model/tripModel');
 const UserModel = require('../model/userModel');
-const DealModel = require('../model/dealModel');
+const FlightModel = require('../model/flightModel');
 
 module.exports = {
   insert: async (req, res) => {
     const user = await UserModel.findById(req.user._id);
     const { budget, origins, destinations } = req.body;
-    const tripsQuery = {
-      price: { $lte: budget },
-      origins: { $in: origins },
-      destinations: { $in: destinations }
-    };
-    const matchingDeals = await DealModel.find(tripsQuery);
+    const matchingFlights = await findMatchingFlights(
+      budget,
+      origins,
+      destinations
+    );
     if (user) {
       const trip = new TripModel({
         ...req.body,
         user,
         createdAt: new Date(),
         updatedAt: new Date(),
-        matchingDeals
+        matchingFlights
       });
       await trip.save();
       res.status(200).json(trip);
@@ -69,8 +68,8 @@ module.exports = {
     if (user) {
       const trips = await TripModel.find({
         user: req.user._id,
-        matchingDeals: { $ne: [] }
-      }).populate('matchingDeals');
+        matchingFlights: { $ne: [] }
+      }).populate('matchingFlights');
       res.status(200).json(trips);
     } else {
       res.status(500).json({ error: 'Unable to find user' });
@@ -84,9 +83,19 @@ module.exports = {
       const trips = await TripModel.find({
         _id: tripId,
         user: req.user._id,
-        matchingDeals: { $ne: [] }
-      }).populate('matchingDeals');
+        matchingFlights: { $ne: [] }
+      }).populate('matchingFlights');
       res.status(200).json(trips);
     } else res.status(500).json({ error: 'Unable to find user' });
   }
 };
+
+async function findMatchingFlights(budget, origins, destinations) {
+  const tripsQuery = {
+    price: { $lte: budget },
+    outOrigin: { $in: origins },
+    outDestination: { $in: destinations }
+  };
+  const matchingFlights = FlightModel.find(tripsQuery);
+  return matchingFlights;
+}

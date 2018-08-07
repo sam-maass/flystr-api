@@ -13,20 +13,7 @@ const dealSchema = new Schema({
   destinations: [String],
   firstDeparture: Date,
   lastReturn: Date,
-  exampleFlights: [
-    {
-      link: String,
-      price: Number,
-      inOrigin: String,
-      inDestination: String,
-      inDate: Date,
-      inCarriers: String,
-      outOrigin: String,
-      outDestination: String,
-      outDate: Date,
-      outCarriers: String
-    }
-  ]
+  exampleFlights: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Flight' }]
 });
 
 const DealModel = mongoose.model('Deal', dealSchema);
