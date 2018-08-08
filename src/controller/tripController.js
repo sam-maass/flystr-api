@@ -5,12 +5,7 @@ const FlightModel = require('../model/flightModel');
 module.exports = {
   insert: async (req, res) => {
     const user = await UserModel.findById(req.user._id);
-    const { budget, origins, destinations } = req.body;
-    const matchingFlights = await findMatchingFlights(
-      budget,
-      origins,
-      destinations
-    );
+    const matchingFlights = await findMatchingFlights(req.body);
     if (user) {
       const trip = new TripModel({
         ...req.body,
@@ -28,10 +23,12 @@ module.exports = {
 
   update: async (req, res) => {
     const tripId = req.params.tripId;
+    const matchingFlights = await findMatchingFlights(req.body);
     const trip = await TripModel.updateMany(
       { _id: tripId },
       {
-        ...req.body
+        ...req.body,
+        matchingFlights
       }
     );
     res.status(200).json(trip);
@@ -90,11 +87,22 @@ module.exports = {
   }
 };
 
-async function findMatchingFlights(budget, origins, destinations) {
+async function findMatchingFlights({
+  budget,
+  origins,
+  destinations,
+  startDate,
+  endDate,
+  fromDuration = 0,
+  toDuration = 10000
+}) {
   const tripsQuery = {
+    outDate: { $gte: startDate },
+    inDate: { $lte: endDate },
     price: { $lte: budget },
     outOrigin: { $in: origins },
-    outDestination: { $in: destinations }
+    outDestination: { $in: destinations },
+    duration: { $gte: fromDuration, $lte: toDuration }
   };
   const matchingFlights = FlightModel.find(tripsQuery);
   return matchingFlights;

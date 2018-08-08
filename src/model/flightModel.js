@@ -11,7 +11,8 @@ const flightsSchema = new Schema({
   outOrigin: String,
   outDestination: String,
   outDate: Date,
-  outCarriers: String
+  outCarriers: String,
+  duration: Number
 });
 
 const DealModel = mongoose.model('Flight', flightsSchema);
