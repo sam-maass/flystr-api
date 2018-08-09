@@ -10,8 +10,6 @@ module.exports = {
       const trip = new TripModel({
         ...req.body,
         user,
-        createdAt: new Date(),
-        updatedAt: new Date(),
         matchingFlights
       });
       await trip.save();

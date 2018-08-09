@@ -1,19 +1,22 @@
 const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
-const flightsSchema = new Schema({
-  link: String,
-  price: Number,
-  inOrigin: String,
-  inDestination: String,
-  inDate: Date,
-  inCarriers: String,
-  outOrigin: String,
-  outDestination: String,
-  outDate: Date,
-  outCarriers: String,
-  duration: Number
-});
+const flightsSchema = new Schema(
+  {
+    link: String,
+    price: Number,
+    inOrigin: String,
+    inDestination: String,
+    inDate: Date,
+    inCarriers: String,
+    outOrigin: String,
+    outDestination: String,
+    outDate: Date,
+    outCarriers: String,
+    duration: Number
+  },
+  { timestamps: true }
+);
 
 const DealModel = mongoose.model('Flight', flightsSchema);
 

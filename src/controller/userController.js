@@ -75,8 +75,7 @@ module.exports = {
     } else {
       const user = new UserModel({
         email: req.body.email,
-        pwHash: await bcrypt.hash(req.body.password, 10),
-        created: new Date()
+        pwHash: await bcrypt.hash(req.body.password, 10)
       });
       await updateJWT(user);
       user.save();
