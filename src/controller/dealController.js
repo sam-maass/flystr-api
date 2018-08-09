@@ -6,7 +6,9 @@ const moment = require('moment');
 
 module.exports = {
   get: async (req, res) => {
-    const deals = await DealModel.find({}).populate('exampleFlights');
+    const deals = await DealModel.find({})
+      .sort({ createdAt: -1 })
+      .populate('exampleFlights');
     res.status(200).json(deals);
   },
 

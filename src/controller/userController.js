@@ -6,9 +6,9 @@ const jwt = require('jsonwebtoken');
 module.exports = {
   getProfile: async (req, res) => {
     const user = await UserModel.findById(req.user._id);
-    const trips = await TripModel.find({ user: req.user._id }).populate(
-      'matchingFlights'
-    );
+    const trips = await TripModel.find({ user: req.user._id })
+      .populate('matchingFlights')
+      .sort({ createdAt: -1 });
     res.status(200).json({ user, trips });
   },
 
