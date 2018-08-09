@@ -13,8 +13,7 @@ module.exports = {
     } else {
       const launchEmail = new LaunchEmailModel({
         email: req.body.email,
-        checkbox: req.body.checkbox,
-        createdAt: new Date()
+        checkbox: req.body.checkbox
       });
       launchEmail.save();
       mail.sendWelcomeEmail(req.body.email);
@@ -22,4 +21,3 @@ module.exports = {
     }
   }
 };
-

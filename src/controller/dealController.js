@@ -36,9 +36,7 @@ async function insertDeal(reqBody, flightIds, user) {
   const deal = new DealModel({
     ...reqBody,
     exampleFlights: flightIds,
-    user,
-    createdAt: new Date(),
-    updatedAt: new Date()
+    user
   });
   await deal.save();
   return deal;
