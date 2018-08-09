@@ -46,14 +46,16 @@ module.exports = {
   },
 
   getAllTrips: async (req, res) => {
-    const trips = await TripModel.find();
+    const trips = await TripModel.find().sort({ createdAt: -1 });
     res.status(200).json(trips);
   },
 
   getUserTrips: async (req, res) => {
     const user = await UserModel.findById(req.user._id);
     if (user) {
-      const trips = await TripModel.find({ user: req.user._id });
+      const trips = await TripModel.find({ user: req.user._id }).sort({
+        createdAt: -1
+      });
       res.status(200).json(trips);
     } else {
       res.status(500).json({ error: 'Unable to find user' });
@@ -66,7 +68,9 @@ module.exports = {
       const trips = await TripModel.find({
         user: req.user._id,
         matchingFlights: { $ne: [] }
-      }).populate('matchingFlights');
+      })
+        .sort({ createdAt: -1 })
+        .populate('matchingFlights');
       res.status(200).json(trips);
     } else {
       res.status(500).json({ error: 'Unable to find user' });
