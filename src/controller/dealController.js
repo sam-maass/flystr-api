@@ -29,6 +29,56 @@ module.exports = {
     } else {
       res.status(500).json({ error: 'Unable to save deal' });
     }
+  },
+
+  update: async (req, res) => {
+    const deal = await DealModel.findById(req.params.dealId);
+    const {
+      title,
+      subtitle,
+      origins,
+      destinations,
+      minPrice,
+      firstDepature,
+      lastReturn,
+      exampleFlights: newFlights
+    } = req.body;
+
+    // insert all flights without id
+    const shouldInsert = newFlights.filter(flight => !flight._id);
+
+    // update all flights with id
+    const shouldUpdate = newFlights.filter(flight => flight._id);
+
+    // delete all flights that had an id but are not mentioned in newFlights
+    const newFlightIds = newFlights.map(flight => flight._id);
+
+    const shouldDelete = deal.exampleFlights
+      .map(flight => flight._id)
+      .filter(flightId => !newFlightIds.includes(`${flightId}`));
+
+    const insertedFlightIds = await insertFlights(shouldInsert);
+    await updateFlights(shouldUpdate);
+    await FligthModel.remove({ _id: { $in: shouldDelete } });
+
+    const exampleFlights = [...deal.exampleFlights, ...insertedFlightIds];
+
+    await deal.update({
+      $set: {
+        title,
+        subtitle,
+        origins,
+        destinations,
+        minPrice,
+        firstDepature,
+        lastReturn,
+        exampleFlights
+      }
+    });
+    await deal.update({
+      $pull: { exampleFlights: { $in: shouldDelete } }
+    });
+    res.status(200).json(deal);
   }
 };
 
@@ -43,7 +93,15 @@ async function insertDeal(reqBody, flightIds, user) {
 }
 
 async function insertFlights(exampleFlights) {
-  const flightsWithDuration = exampleFlights.map(flight => {
+  const flightsWithDuration = calcFlightDuration(exampleFlights);
+
+  const flights = await FligthModel.insertMany(flightsWithDuration);
+  const flightIds = flights.map(flight => flight._id);
+  return flightIds;
+}
+
+function calcFlightDuration(exampleFlights) {
+  return exampleFlights.map(flight => {
     return {
       ...flight,
       duration: moment(flight.inDate, 'YYYY-MM-DD').diff(
@@ -52,9 +110,14 @@ async function insertFlights(exampleFlights) {
       )
     };
   });
-  console.log(flightsWithDuration);
+}
 
-  const flights = await FligthModel.insertMany(flightsWithDuration);
-  const flightIds = flights.map(flight => flight._id);
-  return flightIds;
+async function updateFlights(exampleFlights) {
+  console.log(exampleFlights);
+
+  const flightsWithDuration = calcFlightDuration(exampleFlights);
+
+  flightsWithDuration.forEach(async flight => {
+    await FligthModel.update({ _id: flight._id }, { $set: { ...flight } });
+  });
 }
