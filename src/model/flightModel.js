@@ -13,7 +13,8 @@ const flightsSchema = new Schema(
     outDestination: String,
     outDate: Date,
     outCarriers: String,
-    duration: Number
+    duration: Number,
+    linkSource: String
   },
   { timestamps: true }
 );
