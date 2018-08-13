@@ -14,7 +14,9 @@ const dealSchema = new Schema(
     destinations: [String],
     firstDeparture: Date,
     lastReturn: Date,
-    exampleFlights: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Flight' }]
+    exampleFlights: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Flight' }],
+    removed: Boolean,
+    removedAt: Date
   },
   { timestamps: true }
 );
