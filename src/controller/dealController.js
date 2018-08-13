@@ -6,17 +6,20 @@ const moment = require('moment');
 
 module.exports = {
   get: async (req, res) => {
-    const deals = await DealModel.find({})
+    const deals = await DealModel.find({ removed: { $ne: true } })
       .sort({ createdAt: -1 })
       .populate('exampleFlights');
     res.status(200).json(deals);
   },
 
   getOne: async (req, res) => {
-    const deals = await DealModel.findOne({ _id: req.params.dealId }).populate(
-      'exampleFlights'
-    );
-    res.status(200).json(deals);
+    const deal = await DealModel.findOne({
+      _id: req.params.dealId,
+      removed: { $ne: true }
+    }).populate('exampleFlights');
+    console.log(deal);
+
+    res.status(200).json(deal);
   },
 
   insert: async (req, res) => {
@@ -60,24 +63,27 @@ module.exports = {
     const insertedFlightIds = await insertFlights(shouldInsert);
     await updateFlights(shouldUpdate);
     await FligthModel.remove({ _id: { $in: shouldDelete } });
+    const remainingFlights = deal.exampleFlights.filter(
+      flight => !shouldDelete.includes(flight._id)
+    );
 
-    const exampleFlights = [...deal.exampleFlights, ...insertedFlightIds];
+    const exampleFlights = [...remainingFlights, ...insertedFlightIds];
 
-    await deal.update({
-      $set: {
-        title,
-        subtitle,
-        origins,
-        destinations,
-        minPrice,
-        firstDepature,
-        lastReturn,
-        exampleFlights
-      }
+    await deal.set({
+      title,
+      subtitle,
+      origins,
+      destinations,
+      minPrice,
+      firstDepature,
+      lastReturn,
+      exampleFlights
     });
-    await deal.update({
-      $pull: { exampleFlights: { $in: shouldDelete } }
-    });
+
+    if (deal.exampleFlights[0] === undefined) {
+      await deal.set({ removed: true, removedAt: new Date() });
+    }
+    deal.save();
     res.status(200).json(deal);
   }
 };
