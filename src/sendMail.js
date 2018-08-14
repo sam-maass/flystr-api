@@ -1,14 +1,25 @@
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-sgMail.setSubstitutionWrappers('{{', '}}'); // Configure the substitution tag wrappers globally
 
 const sendWelcomeEmail = function(email) {
   const msg = {
     to: email,
     from: 'sam@flystr.com',
-    templateId: 'c2d3dfde-b2c4-4b6c-b44b-cac1dc5b34fd'
+    templateId: 'd-4150aec3e9b44cc6a1219da5616e4301'
   };
   sgMail.send(msg);
 };
 
-module.exports = { sendWelcomeEmail };
+const sendSignupEmail = function(email) {
+  const msg = {
+    to: email,
+    from: 'flystr@flystr.com',
+    templateId: 'd-de80ce5dbcec4b3ebd9a3c598e60f0c7',
+    dynamic_template_data: {
+      email
+    }
+  };
+  sgMail.send(msg);
+};
+
+module.exports = { sendWelcomeEmail, sendSignupEmail };
