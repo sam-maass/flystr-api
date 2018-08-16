@@ -5,7 +5,6 @@ const UserController = require('./controller/userController');
 const TripController = require('./controller/tripController');
 const DealController = require('./controller/dealController');
 const AirportController = require('./controller/airportController');
-const LaunchEmailController = require('./controller/launchEmailController');
 const {
   authenticate,
   validateToken,
@@ -26,12 +25,11 @@ router.post('/trips', authenticate, TripController.insert);
 router.get('/trips', authenticate, TripController.getUserTripsWithDeals);
 router.get('/trips/all', authenticateAdmin, TripController.getAllTrips);
 
-router.post('/deal/:dealId', authenticate, DealController.update);
-router.post('/deal', authenticate, DealController.insert);
-router.get('/deal/:dealId', authenticate, DealController.getOne);
-router.get('/deals', authenticate, DealController.get);
+router.post('/deal/:dealId', authenticateAdmin, DealController.update);
+router.post('/deal', authenticateAdmin, DealController.insert);
+router.get('/deal/:dealId', DealController.getOne);
+router.get('/deals', DealController.get);
 
 router.get('/airports', authenticate, AirportController.getSuggestions);
-router.post('/launchSignup', LaunchEmailController.save);
 
 module.exports = router;
