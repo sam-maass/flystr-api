@@ -1,6 +1,7 @@
 const DealModel = require('../model/dealModel');
 const UserModel = require('../model/userModel');
-const FligthModel = require('../model/flightModel');
+const FlightModel = require('../model/flightModel');
+const AirportModel = require('../model/airportModel');
 const FlightController = require('./flightController');
 const moment = require('moment');
 
@@ -17,8 +18,6 @@ module.exports = {
       _id: req.params.dealId,
       removed: { $ne: true }
     }).populate('exampleFlights');
-    console.log(deal);
-
     res.status(200).json(deal);
   },
 
@@ -62,7 +61,7 @@ module.exports = {
 
     const insertedFlightIds = await insertFlights(shouldInsert);
     await updateFlights(shouldUpdate);
-    await FligthModel.remove({ _id: { $in: shouldDelete } });
+    await FlightModel.remove({ _id: { $in: shouldDelete } });
     const remainingFlights = deal.exampleFlights.filter(
       flight => !shouldDelete.includes(flight._id)
     );
@@ -99,31 +98,49 @@ async function insertDeal(reqBody, flightIds, user) {
 }
 
 async function insertFlights(exampleFlights) {
-  const flightsWithDuration = calcFlightDuration(exampleFlights);
-
-  const flights = await FligthModel.insertMany(flightsWithDuration);
-  const flightIds = flights.map(flight => flight._id);
-  return flightIds;
-}
-
-function calcFlightDuration(exampleFlights) {
-  return exampleFlights.map(flight => {
-    return {
-      ...flight,
-      duration: moment(flight.inDate, 'YYYY-MM-DD').diff(
-        moment(flight.outDate, 'YYYY-MM-DD'),
-        'days'
-      )
-    };
+  const augmentedFlights = exampleFlights
+    .map(addDuration)
+    .map(populateAirports);
+  return await Promise.all(augmentedFlights).then(async augmentedFlights => {
+    const flights = await FlightModel.insertMany(augmentedFlights);
+    const flightIds = flights.map(flight => flight._id);
+    return flightIds;
   });
 }
 
+const addDuration = flight => {
+  return {
+    ...flight,
+    duration: moment(flight.inDate, 'YYYY-MM-DD').diff(
+      moment(flight.outDate, 'YYYY-MM-DD'),
+      'days'
+    )
+  };
+};
+
+const populateAirports = async flight => {
+  const getAirport = iata =>
+    AirportModel.findOne(
+      {
+        iata
+      },
+      'name country city iata'
+    );
+  const inOriginDetails = await getAirport(flight.inOrigin);
+  const inDestinationDetails = await getAirport(flight.inDestination);
+  const outOriginDetails = await getAirport(flight.outOrigin);
+  const outDestinationDetails = await getAirport(flight.outDestination);
+  return {
+    ...flight,
+    inOriginDetails,
+    inDestinationDetails,
+    outOriginDetails,
+    outDestinationDetails
+  };
+};
+
 async function updateFlights(exampleFlights) {
-  console.log(exampleFlights);
-
-  const flightsWithDuration = calcFlightDuration(exampleFlights);
-
-  flightsWithDuration.forEach(async flight => {
-    await FligthModel.update({ _id: flight._id }, { $set: { ...flight } });
+  exampleFlights.map(addDuration).forEach(async flight => {
+    await FlightModel.update({ _id: flight._id }, { $set: { ...flight } });
   });
 }
