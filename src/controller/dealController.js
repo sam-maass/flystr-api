@@ -33,6 +33,21 @@ module.exports = {
     }
   },
 
+  _removeFlights: async ids => {
+    const relevantDeals = await DealModel.find({
+      exampleFlights: { $in: ids }
+    });
+    await DealModel.updateMany(
+      {},
+      {
+        $pull: { exampleFlights: { $in: ids } }
+      }
+    ).exec();
+    relevantDeals.forEach(deal => {
+      _updateDeal(deal._id);
+    });
+  },
+
   update: async (req, res) => {
     const deal = await DealModel.findById(req.params.dealId);
     const {
@@ -144,3 +159,35 @@ async function updateFlights(exampleFlights) {
     await FlightModel.update({ _id: flight._id }, { $set: { ...flight } });
   });
 }
+
+const _updateDeal = async dealId => {
+  const deal = await DealModel.findById(dealId).populate('exampleFlights');
+  const leftFlights = deal.exampleFlights.length;
+  if (leftFlights === 0) {
+    deal.remove();
+  } else {
+    const _minPrice = Math.min(...deal.exampleFlights.map(f => f.price));
+    const _lastReturn = new Date(
+      Math.max(...deal.exampleFlights.map(f => f.inDate))
+    );
+    const _firstDeparture = new Date(
+      Math.min(...deal.exampleFlights.map(f => f.outDate))
+    );
+    const _origins = [...new Set(deal.exampleFlights.map(f => f.outOrigin))];
+    const _destinations = [
+      ...new Set(deal.exampleFlights.map(f => f.outDestination))
+    ];
+    await DealModel.update(
+      { _id: dealId },
+      {
+        $set: {
+          minPrice: _minPrice,
+          lastReturn: _lastReturn,
+          firstDeparture: _firstDeparture,
+          origins: _origins,
+          destinations: _destinations
+        }
+      }
+    );
+  }
+};

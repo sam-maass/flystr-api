@@ -7,6 +7,10 @@ const { sendSignupEmail } = require('../sendMail');
 module.exports = {
   getProfile: async (req, res) => {
     const user = await UserModel.findById(req.user._id);
+    if (!user) {
+      res.status(501);
+      return;
+    }
     const trips = await TripModel.find({ user: req.user._id })
       .populate('matchingFlights')
       .sort({ createdAt: -1 });
