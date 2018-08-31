@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const DealControlller = require('../controller/dealController');
 
 const Schema = mongoose.Schema;
 const airport = {
@@ -25,11 +26,26 @@ const flightsSchema = new Schema(
     outDate: Date,
     outCarriers: String,
     duration: Number,
-    linkSource: String
+    linkSource: String,
+    removed: Boolean
   },
   { timestamps: true }
 );
 
-const DealModel = mongoose.model('Flight', flightsSchema);
+const FlightModel = mongoose.model('Flight', flightsSchema);
+setInterval(async () => {
+  const flights = await FlightModel.find({
+    outDate: { $lte: new Date() },
+    removed: { $ne: true }
+  });
 
-module.exports = DealModel;
+  const ids = flights.map(f => f._id);
+
+  DealControlller._removeFlights(ids);
+  FlightModel.updateMany(
+    { _id: { $in: ids } },
+    { $set: { removed: true } }
+  ).exec();
+}, 1 * 60 * 60 * 1000); // 1 hour
+
+module.exports = FlightModel;
