@@ -4,6 +4,7 @@ const FlightModel = require('../model/flightModel');
 const AirportModel = require('../model/airportModel');
 const FlightController = require('./flightController');
 const moment = require('moment');
+const slugify = require('slugify');
 
 module.exports = {
   get: async (req, res) => {
@@ -14,10 +15,20 @@ module.exports = {
   },
 
   getOne: async (req, res) => {
-    const deal = await DealModel.findOne({
-      _id: req.params.dealId,
-      removed: { $ne: true }
+    console.log('getOne');
+
+    let deal = await DealModel.findOne({
+      slug: req.params.dealId,
+      removed: {
+        $ne: true
+      }
     }).populate('exampleFlights');
+    if (!deal) {
+      deal = await DealModel.findOne({
+        _id: req.params.dealId,
+        removed: { $ne: true }
+      }).populate('exampleFlights');
+    }
     res.status(200).json(deal);
   },
 
@@ -105,6 +116,7 @@ module.exports = {
 async function insertDeal(reqBody, flightIds, user) {
   const deal = new DealModel({
     ...reqBody,
+    slug: slugify(`${reqBody.title} from ${reqBody.subtitle}`, { lower: true }),
     exampleFlights: flightIds,
     user
   });
