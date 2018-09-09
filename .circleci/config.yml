@@ -8,7 +8,7 @@ jobs:
     docker:
       # specify the version you desire here
       - image: circleci/node:10
-      
+
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
@@ -18,18 +18,18 @@ jobs:
 
     steps:
       - checkout
-      - run: 
+      - run:
           name: Install Python
-          working_directory: 
-          command:  |
+          ? working_directory
+          command: |
             sudo apt-get -y -qq update
             sudo apt-get -y -qq install python3.4-dev
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v3-dependencies-{{ checksum "package.json" }}
-          # fallback to using the latest cache if no exact match is found
-          - v3-dependencies-
+            - v3-dependencies-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v3-dependencies-
 
       - run: npm install
 
@@ -37,14 +37,14 @@ jobs:
           paths:
             - node_modules
           key: v3-dependencies-{{ checksum "package.json" }}
-        
+
       # run tests!
       - run: npm run test
   deploy:
     docker:
       # specify the version you desire here
       - image: circleci/node:10
-      
+
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
@@ -54,13 +54,13 @@ jobs:
 
     steps:
       - checkout
-      - setup_remote_docker: 
+      - setup_remote_docker:
           docker_layer_caching: true
       - run: docker build -t flystr .
       - run: docker save -o flystr_image flystr
-      - run: scp -o StrictHostKeyChecking=no flystr_image root@139.59.132.144:~/flystr_image
-      - run: ssh -o StrictHostKeyChecking=no  root@139.59.132.144 -- docker load -i flystr_image
-      - run: ssh -o StrictHostKeyChecking=no  root@139.59.132.144 -- docker-compose up -d
+      - run: scp -o StrictHostKeyChecking=no flystr_image root@159.69.150.31:~/flystr_image
+      - run: ssh -o StrictHostKeyChecking=no  root@159.69.150.31 -- docker load -i flystr_image
+      - run: ssh -o StrictHostKeyChecking=no  root@159.69.150.31 -- docker-compose up -d
 
 workflows:
   version: 2
