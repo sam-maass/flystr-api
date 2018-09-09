@@ -57,9 +57,9 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
       - run: docker build -t flystr-api .
-      - run: docker save -o flystr_image flystr-api
-      - run: scp -o StrictHostKeyChecking=no flystr_image root@159.69.150.31:~/flystr_image
-      - run: ssh -o StrictHostKeyChecking=no  root@159.69.150.31 -- docker load -i flystr_image
+      - run: docker save -o flystr_api_image flystr-api
+      - run: scp -o StrictHostKeyChecking=no flystr_api_image root@159.69.150.31:~/flystr_api_image
+      - run: ssh -o StrictHostKeyChecking=no  root@159.69.150.31 -- docker load -i flystr_api_image
       - run: ssh -o StrictHostKeyChecking=no  root@159.69.150.31 -- docker-compose up -d
 
 workflows:
