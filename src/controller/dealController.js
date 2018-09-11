@@ -60,10 +60,18 @@ module.exports = {
   },
 
   update: async (req, res) => {
-    const deal = await DealModel.findById(req.params.dealId);
+    let deal = await DealModel.findOne({
+      slug: req.params.dealId
+    });
+    if (!deal) {
+      deal = await DealModel.findOne({
+        _id: req.params.dealId
+      });
+    }
+
+    console.log(deal);
+
     const {
-      title,
-      subtitle,
       origins,
       destinations,
       minPrice,
@@ -71,6 +79,9 @@ module.exports = {
       lastReturn,
       exampleFlights: newFlights
     } = req.body;
+
+    const title = req.body.title || deal.title;
+    const subtitle = req.body.subtitle || deal.subtitle;
 
     // insert all flights without id
     const shouldInsert = newFlights.filter(flight => !flight._id);
