@@ -25,7 +25,6 @@ const flightsSchema = new Schema(
     outDate: Date,
     outCarriers: String,
     duration: Number,
-    linkSource: String,
     removed: Boolean
   },
   { timestamps: true }
