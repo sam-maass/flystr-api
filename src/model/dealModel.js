@@ -7,8 +7,14 @@ const dealSchema = new Schema(
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     createdAt: Date,
     updatedAt: Date,
-    title: String,
-    subtitle: String,
+    title: {
+      type: String,
+      required: true
+    },
+    subtitle: {
+      type: String,
+      required: true
+    },
     minPrice: Number,
     origins: [String],
     destinations: [String],
