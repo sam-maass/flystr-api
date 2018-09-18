@@ -14,6 +14,14 @@ module.exports = {
     res.status(200).json(deals);
   },
 
+  getMostRecent: async (req, res) => {
+    const deals = await DealModel.find({ removed: { $ne: true } })
+      .limit(3)
+      .sort({ createdAt: -1 })
+      .populate('exampleFlights');
+    res.status(200).json(deals);
+  },
+
   getOne: async (req, res) => {
     console.log('getOne');
 
