@@ -29,6 +29,7 @@ router.post('/deal/:dealId', authenticateAdmin, DealController.update);
 router.post('/deal', authenticateAdmin, DealController.insert);
 router.get('/deal/:dealId', DealController.getOne);
 router.get('/deals', DealController.get);
+router.get('/recentDeals', DealController.getMostRecent); // Landing Page Deals
 
 router.get('/airports', authenticate, AirportController.getSuggestions);
 
