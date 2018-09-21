@@ -4,6 +4,7 @@ const express = require('express'),
 const UserController = require('./controller/userController');
 const TripController = require('./controller/tripController');
 const DealController = require('./controller/dealController');
+const FlightController = require('./controller/flightController');
 const AirportController = require('./controller/airportController');
 const {
   authenticate,
@@ -30,6 +31,9 @@ router.post('/deal', authenticateAdmin, DealController.insert);
 router.get('/deal/:dealId', DealController.getOne);
 router.get('/deals', DealController.get);
 router.get('/recentDeals', DealController.getMostRecent); // Landing Page Deals
+
+router.get('/flights', authenticateAdmin, FlightController.get);
+router.delete('/flight/:flightId', authenticateAdmin, FlightController.delete);
 
 router.get('/airports', authenticate, AirportController.getSuggestions);
 
