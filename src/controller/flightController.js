@@ -16,6 +16,12 @@ module.exports = {
     res.status(200).json({ removed: true });
   },
 
+  insert: async (req, res) => {
+    const flight = new FlightModel(req.body.flight);
+    await flight.save();
+    res.status(200).json({ ...flight });
+  },
+
   _matchFlightsWithTrips: async flightIds => {
     const flights = await FlightModel.find({ _id: { $in: flightIds } });
     flights.forEach(async flight => {
