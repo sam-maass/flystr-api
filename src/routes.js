@@ -33,6 +33,7 @@ router.get('/deals', DealController.get);
 router.get('/recentDeals', DealController.getMostRecent); // Landing Page Deals
 
 router.get('/flights', authenticateAdmin, FlightController.get);
+router.post('/flight', authenticateAdmin, FlightController.insert);
 router.delete('/flight/:flightId', authenticateAdmin, FlightController.delete);
 
 router.get('/airports', authenticate, AirportController.getSuggestions);
