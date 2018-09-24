@@ -72,6 +72,9 @@ module.exports = {
 };
 
 const augmentFlight = async flight => {
+  delete flight._id;
+  delete flight.createdAt;
+  delete flight.updatedAt;
   const airportDetails = await populateAirports(flight);
   return {
     ...flight,
