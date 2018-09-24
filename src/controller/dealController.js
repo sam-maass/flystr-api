@@ -37,6 +37,7 @@ module.exports = {
         removed: { $ne: true }
       }).populate('exampleFlights');
     }
+    if (!deal) return res.status(404).json({ error: 'No Deal found' });
     res.status(200).json(deal);
   },
 
