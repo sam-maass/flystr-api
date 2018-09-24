@@ -1,3 +1,4 @@
+const { recalculateDealData } = require('../utils/deals/recalculateDealData');
 const TripModel = require('../model/tripModel');
 const FlightModel = require('../model/flightModel');
 const DealModel = require('../model/dealModel');
@@ -133,32 +134,6 @@ async function removeFlightById(flightId) {
   await removeFlightTrip(flightId);
 }
 
-const recalculateDealData = async ({ _id }) => {
-  const dealData = await DealModel.findById(_id).populate('exampleFlights');
-  const flights = dealData.exampleFlights;
-  const destinations = [
-    ...new Set([...flights.map(flight => flight.outDestination)])
-  ];
-  const currency = flights[0].currency;
-  const origins = [...new Set([...flights.map(flight => flight.outOrigin)])];
-  const minPrice = Math.min(...flights.map(f => f.price).filter(v => v >= 0));
-  const firstDeparture = moment
-    .min(...flights.map(f => moment(f.outDate)))
-    .format('YYYY-MM-DD');
-  const lastReturn = moment
-    .max(...flights.map(f => moment(f.inDate)))
-    .format('YYYY-MM-DD');
-  await DealModel.findByIdAndUpdate(_id, {
-    $set: {
-      destinations,
-      currency,
-      origins,
-      minPrice,
-      firstDeparture,
-      lastReturn
-    }
-  });
-};
 async function removeFlightFromDeal(flightId) {
   const deals = await DealModel.find({
     exampleFlights: { $in: [flightId] }
