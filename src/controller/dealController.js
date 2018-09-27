@@ -53,8 +53,6 @@ module.exports = {
       console.log(deal);
 
       recalculateDealData(deal._id);
-      // const deal = await insertDeal(req.body, flightIds, user);
-      // FlightController._matchFlightsWithTrips(flightIds);
       res.status(200).json({ deal });
     } else {
       res.status(500).json({ error: 'Unable to save deal' });

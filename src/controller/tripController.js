@@ -104,8 +104,13 @@ async function findMatchingFlights({
     price: { $lte: budget },
     outOrigin: { $in: origins },
     outDestination: { $in: destinations },
-    duration: { $gte: fromDuration, $lte: toDuration }
+    removed: { $ne: true }
   };
+  if (fromDuration >= 0 && fromDuration !== '') {
+    tripsQuery.duration = { $gte: fromDuration, $lte: toDuration };
+  }
+  console.log(tripsQuery);
+
   const matchingFlights = FlightModel.find(tripsQuery);
   return matchingFlights;
 }

@@ -1,7 +1,9 @@
 const TripModel = require('../../model/tripModel');
 const FlightModel = require('../../model/flightModel');
 
-export const matchFlightsWithTrips = async flightIds => {
+async function matchFlightsWithTrips(flightIds) {
+  console.log({ flightIds });
+
   const flights = await FlightModel.find({ _id: { $in: flightIds } });
   flights.forEach(async flight => {
     const query = {
@@ -22,8 +24,12 @@ export const matchFlightsWithTrips = async flightIds => {
       endDate: { $gte: flight.inDate },
       budget: { $gte: flight.price }
     };
+    console.log(query);
+
     await TripModel.updateMany(query, {
       $addToSet: { matchingFlights: flight }
     });
   });
-};
+}
+
+exports.matchFlightsWithTrips = matchFlightsWithTrips;
