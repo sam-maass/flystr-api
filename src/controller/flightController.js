@@ -6,6 +6,9 @@ const {
   replaceFlightFromDeal
 } = require('../utils/deals/replaceFlightFromDeal');
 const { augmentFlight } = require('../utils/flights/augmentFlight');
+const {
+  matchFlightsWithTrips
+} = require('../utils/flights/matchFlightsWithTrips');
 
 module.exports = {
   get: async (req, res) => {
@@ -26,7 +29,6 @@ module.exports = {
   insert: async (req, res) => {
     const augmentedFlight = await augmentFlight(req.body.flight);
     const flight = new FlightModel(augmentedFlight);
-    await flight.save();
 
     // check if it replaces old flight
     const oldFlight = await findDuplicateFlight(flight);
@@ -35,6 +37,9 @@ module.exports = {
       await removeFlightById(oldFlight._id);
       // add new flight to deal
     }
+
+    await flight.save();
+    matchFlightsWithTrips([flight._id]);
 
     res.status(200).json({ ...flight });
   }
