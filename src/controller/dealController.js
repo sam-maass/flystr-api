@@ -1,3 +1,5 @@
+const { getRelevantDeals } = require('../utils/deals/getRelevantDeals');
+
 const { recalculateDealData } = require('../utils/deals/recalculateDealData');
 const DealModel = require('../model/dealModel');
 const UserModel = require('../model/userModel');
@@ -5,10 +7,17 @@ const slugify = require('slugify');
 
 module.exports = {
   get: async (req, res) => {
-    const deals = await DealModel.find({ removed: { $ne: true } })
-      .sort({ createdAt: -1 })
-      .populate('exampleFlights');
-    res.status(200).json(deals);
+    const isValidId = id => id && id.match(/^[0-9a-fA-F]{24}$/);
+    const { activeDeal } = req.query;
+    if (isValidId(activeDeal)) {
+      const deals = await getRelevantDeals(activeDeal);
+      res.status(200).json(deals);
+    } else {
+      const deals = await DealModel.find({ removed: { $ne: true } })
+        .sort({ createdAt: -1 })
+        .populate('exampleFlights');
+      res.status(200).json(deals);
+    }
   },
 
   getMostRecent: async (req, res) => {
