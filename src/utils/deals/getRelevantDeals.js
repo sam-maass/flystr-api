@@ -11,7 +11,7 @@ exports.getRelevantDeals = getRelevantDeals;
 async function getOtherDeals(activeDeal, origins) {
   return await DealModel.find({
     removed: { $ne: true },
-    _id: { $ne: activeDeal },
+    slug: { $ne: activeDeal },
     origins: { $nin: origins }
   })
     .sort({ createdAt: -1 })
@@ -21,7 +21,7 @@ async function getOtherDeals(activeDeal, origins) {
 function getSameOriginDeals(activeDeal, origins) {
   return DealModel.find({
     removed: { $ne: true },
-    _id: { $ne: activeDeal },
+    slug: { $ne: activeDeal },
     origins: { $in: origins }
   })
     .sort({ createdAt: -1 })
@@ -31,6 +31,6 @@ function getSameOriginDeals(activeDeal, origins) {
 async function getExactDeal(activeDeal) {
   return await DealModel.find({
     removed: { $ne: true },
-    _id: activeDeal
+    slug: activeDeal
   }).populate('exampleFlights');
 }
