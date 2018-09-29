@@ -24,7 +24,8 @@ const dealSchema = new Schema(
     removed: Boolean,
     removedAt: Date,
     slug: String,
-    currency: String
+    currency: String,
+    lastChecked: Date
   },
   { timestamps: true }
 );
