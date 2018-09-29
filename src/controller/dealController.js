@@ -5,17 +5,31 @@ const DealModel = require('../model/dealModel');
 const UserModel = require('../model/userModel');
 const slugify = require('slugify');
 
+const limitRemovedDeals = (deals, { limit }) => {
+  let removedInResult = 0;
+  return deals.filter(deal => {
+    if (!deal.removed) return true;
+    if (deal.removed && removedInResult < limit) {
+      removedInResult++;
+      return true;
+    }
+    return false;
+  });
+};
+
 module.exports = {
   get: async (req, res) => {
     const { activeDeal } = req.query;
     if (activeDeal) {
       const deals = await getRelevantDeals(activeDeal);
-      res.status(200).json(deals);
+      const limitedDeals = limitRemovedDeals(deals, { limit: 5 });
+      res.status(200).json(limitedDeals);
     } else {
-      const deals = await DealModel.find({ removed: { $ne: true } })
+      const deals = await DealModel.find()
         .sort({ createdAt: -1 })
         .populate('exampleFlights');
-      res.status(200).json(deals);
+      const limitedDeals = limitRemovedDeals(deals, { limit: 5 });
+      res.status(200).json(limitedDeals);
     }
   },
 

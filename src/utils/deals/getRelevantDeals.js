@@ -10,7 +10,6 @@ async function getRelevantDeals(activeDeal) {
 exports.getRelevantDeals = getRelevantDeals;
 async function getOtherDeals(activeDeal, origins) {
   return await DealModel.find({
-    removed: { $ne: true },
     slug: { $ne: activeDeal },
     origins: { $nin: origins }
   })
@@ -30,7 +29,6 @@ function getSameOriginDeals(activeDeal, origins) {
 
 async function getExactDeal(activeDeal) {
   return await DealModel.find({
-    removed: { $ne: true },
     slug: activeDeal
   }).populate('exampleFlights');
 }
