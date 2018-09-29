@@ -7,9 +7,8 @@ const slugify = require('slugify');
 
 module.exports = {
   get: async (req, res) => {
-    const isValidId = id => id && id.match(/^[0-9a-fA-F]{24}$/);
     const { activeDeal } = req.query;
-    if (isValidId(activeDeal)) {
+    if (activeDeal) {
       const deals = await getRelevantDeals(activeDeal);
       res.status(200).json(deals);
     } else {
