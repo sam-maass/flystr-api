@@ -1,5 +1,5 @@
-const FlightModel = require('../../model/flightModel');
-async function findDuplicateFlight(flight) {
+import FlightModel from '../../model/flightModel';
+export async function findDuplicateFlight(flight) {
   const { outDate, inDate, outOrigin, outDestination } = flight;
   const oldFlight = await FlightModel.findOne({
     outDate,
@@ -10,4 +10,3 @@ async function findDuplicateFlight(flight) {
   });
   return oldFlight;
 }
-exports.findDuplicateFlight = findDuplicateFlight;

@@ -1,5 +1,5 @@
-const DealModel = require('../../model/dealModel');
-async function getRelevantDeals(activeDeal) {
+import DealModel from '../../model/dealModel';
+export async function getRelevantDeals(activeDeal) {
   const deal = await getExactDeal(activeDeal);
   const origins = deal ? deal[0].origins : [];
   const sameAirportDeals = await getSameOriginDeals(activeDeal, origins);
@@ -7,7 +7,6 @@ async function getRelevantDeals(activeDeal) {
   const deals = [...deal, ...sameAirportDeals, ...otherDeals];
   return deals;
 }
-exports.getRelevantDeals = getRelevantDeals;
 async function getOtherDeals(activeDeal, origins) {
   return await DealModel.find({
     slug: { $ne: activeDeal },

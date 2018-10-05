@@ -1,8 +1,7 @@
-const DealModel = require('../../model/dealModel');
-async function removeEmptyDeals() {
+import DealModel from '../../model/dealModel';
+export async function removeEmptyDeals() {
   await DealModel.updateMany(
     { exampleFlights: [] },
     { $set: { removed: true } }
   );
 }
-exports.removeEmptyDeals = removeEmptyDeals;

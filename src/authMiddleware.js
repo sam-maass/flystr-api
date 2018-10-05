@@ -1,5 +1,5 @@
-const googleJWT = require('./googleAuthJWT');
-const jwt = require('jsonwebtoken');
+import googleJWT from './googleAuthJWT';
+import jwt from 'jsonwebtoken';
 
 const authenticateAdmin = async (req, res, next) => {
   const token = req.get('authorization');

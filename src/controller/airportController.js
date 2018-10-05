@@ -1,4 +1,4 @@
-const AirportModel = require('../model/airportModel');
+import AirportModel from '../model/airportModel';
 
 module.exports = {
   getSuggestions: async (req, res) => {

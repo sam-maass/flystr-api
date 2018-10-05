@@ -1,17 +1,13 @@
-const FlightModel = require('./model/flightModel');
-const DealControlller = require('./controller/dealController');
+import { findDealsForAllTrips } from './utils/crawler/findDealsForTrips';
+import { removeOldFlights } from './utils/flights/removeOldFlights';
+import { removeOutdatedFlights } from './utils/flights/removeOutdatedFlights';
 
-setInterval(async () => {
-  const flights = await FlightModel.find({
-    outDate: { $lte: new Date() },
-    removed: { $ne: true }
-  });
-
-  const ids = flights.map(f => f._id);
-
-  DealControlller._removeFlights(ids);
-  FlightModel.updateMany(
-    { _id: { $in: ids } },
-    { $set: { removed: true } }
-  ).exec();
+setInterval(() => {
+  removeOutdatedFlights();
 }, 1 * 60 * 60 * 1000); // 1 hour
+
+// Update Flights every 6 hours
+setInterval(() => {
+  findDealsForAllTrips();
+  removeOldFlights();
+}, 6 * 60 * 60 * 1000);
