@@ -3,6 +3,8 @@ const { removeFlightFromTrip } = require('../trips/removeFlightFromTrip');
 const FlightModel = require('../../model/flightModel');
 
 async function removeFlightById(flightId) {
+  console.log(`removing flight ${flightId}`);
+
   await FlightModel.findByIdAndUpdate(flightId, {
     $set: { removed: true }
   });
