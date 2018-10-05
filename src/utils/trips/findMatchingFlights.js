@@ -1,5 +1,5 @@
 const FlightModel = require('../../model/flightModel');
-async function findMatchingFlights({
+export async function findMatchingFlights({
   budget,
   origins,
   destinations,
@@ -23,4 +23,3 @@ async function findMatchingFlights({
   const matchingFlights = FlightModel.find(tripsQuery);
   return matchingFlights;
 }
-exports.findMatchingFlights = findMatchingFlights;

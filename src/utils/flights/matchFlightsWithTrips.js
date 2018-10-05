@@ -1,7 +1,7 @@
 const TripModel = require('../../model/tripModel');
 const FlightModel = require('../../model/flightModel');
 
-async function matchFlightsWithTrips(flightIds) {
+export async function matchFlightsWithTrips(flightIds) {
   const flights = await FlightModel.find({ _id: { $in: flightIds } });
   flights.forEach(async flight => {
     const query = {
@@ -28,5 +28,3 @@ async function matchFlightsWithTrips(flightIds) {
     });
   });
 }
-
-exports.matchFlightsWithTrips = matchFlightsWithTrips;

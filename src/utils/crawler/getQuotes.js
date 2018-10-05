@@ -2,7 +2,7 @@ const { querySkyscanner } = require('./querySkyscanner');
 const { insertFlight } = require('../flights/insertFlight');
 const moment = require('moment');
 
-async function getQuotes({
+export async function getQuotes({
   origin,
   destination,
   outboundPartialDate,
@@ -53,4 +53,3 @@ async function getQuotes({
   });
   bestOptions.forEach(option => insertFlight(option));
 }
-exports.getQuotes = getQuotes;

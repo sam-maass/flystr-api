@@ -2,7 +2,7 @@ const unirest = require('unirest');
 const { addToSkyscannerQueue } = require('./skyScannerQueue');
 console.log(addToSkyscannerQueue);
 
-function querySkyscanner(requestObj) {
+export function querySkyscanner(requestObj) {
   const {
     origin,
     destination,
@@ -32,5 +32,3 @@ function querySkyscanner(requestObj) {
       });
   });
 }
-
-exports.querySkyscanner = querySkyscanner;
