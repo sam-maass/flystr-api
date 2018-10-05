@@ -1,8 +1,8 @@
-const { findDealsForAllTrips } = require('./utils/crawler/findDealsForTrips');
-const { removeOldFlights } = require('./utils/flights/removeOldFlights');
+import { findDealsForAllTrips } from './utils/crawler/findDealsForTrips';
+import { removeOldFlights } from './utils/flights/removeOldFlights';
 
-const FlightModel = require('./model/flightModel');
-const DealControlller = require('./controller/dealController');
+import FlightModel from './model/flightModel';
+import DealControlller from './controller/dealController';
 
 setInterval(async () => {
   const flights = await FlightModel.find({
@@ -24,5 +24,3 @@ setInterval(() => {
   findDealsForAllTrips();
   removeOldFlights();
 }, 6 * 60 * 60 * 1000);
-
-findDealsForAllTrips();

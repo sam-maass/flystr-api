@@ -1,6 +1,6 @@
-const FlightModel = require('../../model/flightModel');
-const { removeFlightById } = require('./removeFlightById');
-const moment = require('moment');
+import FlightModel from '../../model/flightModel';
+import { removeFlightById } from './removeFlightById';
+import moment from 'moment';
 
 export async function removeOldFlights() {
   const flights = await FlightModel.find({

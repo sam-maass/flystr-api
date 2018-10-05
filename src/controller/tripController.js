@@ -1,8 +1,8 @@
-const { insertTrip } = require('../utils/trips/insertTrip');
-const { findMatchingFlights } = require('../utils/trips/findMatchingFlights');
+import { insertTrip } from '../utils/trips/insertTrip';
+import { findMatchingFlights } from '../utils/trips/findMatchingFlights';
 
-const TripModel = require('../model/tripModel');
-const UserModel = require('../model/userModel');
+import TripModel from '../model/tripModel';
+import UserModel from '../model/userModel';
 
 module.exports = {
   insert: async (req, res) => {

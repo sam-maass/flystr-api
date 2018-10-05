@@ -1,8 +1,8 @@
-const UserModel = require('../model/userModel');
-const TripModel = require('../model/tripModel');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const { sendSignupEmail } = require('../sendMail');
+import UserModel from '../model/userModel';
+import TripModel from '../model/tripModel';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { sendSignupEmail } from '../sendMail';
 
 module.exports = {
   getProfile: async (req, res) => {

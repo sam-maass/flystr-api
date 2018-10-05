@@ -1,4 +1,4 @@
-const DealModel = require('../../model/dealModel');
+import DealModel from '../../model/dealModel';
 export async function getRelevantDeals(activeDeal) {
   const deal = await getExactDeal(activeDeal);
   const origins = deal ? deal[0].origins : [];

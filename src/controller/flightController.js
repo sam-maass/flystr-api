@@ -1,8 +1,8 @@
-const { insertFlight } = require('../utils/flights/insertFlight');
+import { insertFlight } from '../utils/flights/insertFlight';
 
-const FlightModel = require('../model/flightModel');
+import FlightModel from '../model/flightModel';
 
-const { removeFlightById } = require('../utils/flights/removeFlightById');
+import { removeFlightById } from '../utils/flights/removeFlightById';
 
 module.exports = {
   get: async (req, res) => {

@@ -1,11 +1,11 @@
 const express = require('express'),
   router = express.Router();
 
-const UserController = require('./controller/userController');
-const TripController = require('./controller/tripController');
-const DealController = require('./controller/dealController');
-const FlightController = require('./controller/flightController');
-const AirportController = require('./controller/airportController');
+import UserController from './controller/userController';
+import TripController from './controller/tripController';
+import DealController from './controller/dealController';
+import FlightController from './controller/flightController';
+import AirportController from './controller/airportController';
 const {
   authenticate,
   validateToken,
