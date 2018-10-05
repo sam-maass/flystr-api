@@ -42,8 +42,6 @@ module.exports = {
   },
 
   getOne: async (req, res) => {
-    console.log('getOne');
-
     let deal = await DealModel.findOne({
       slug: req.params.dealId,
       removed: {
