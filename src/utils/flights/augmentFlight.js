@@ -21,7 +21,6 @@ const addDuration = flight => {
   };
 };
 const populateAirports = async flight => {
-  console.log('populateAirports');
   const getAirport = iata =>
     AirportModel.findOne(
       {
@@ -33,7 +32,6 @@ const populateAirports = async flight => {
   const inDestinationDetails = await getAirport(flight.inDestination);
   const outOriginDetails = await getAirport(flight.outOrigin);
   const outDestinationDetails = await getAirport(flight.outDestination);
-  console.log(flight.inOrigin, inOriginDetails);
   return {
     inOriginDetails,
     inDestinationDetails,
