@@ -1,7 +1,7 @@
 import { findMatchingFlights } from './findMatchingFlights';
-import { findDealsForTrips } from '../crawler/findDealsForTrips';
 
 import TripModel from '../../model/tripModel';
+import { crawler } from '../skyscannerCrawler';
 
 export async function insertTrip(tripData, user) {
   const matchingFlights = await findMatchingFlights(tripData);
@@ -11,6 +11,6 @@ export async function insertTrip(tripData, user) {
     matchingFlights
   });
   await trip.save();
-  findDealsForTrips([trip]);
+  crawler(`/crawl/trips/${trip._id}`);
   return trip;
 }
