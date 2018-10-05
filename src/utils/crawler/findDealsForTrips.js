@@ -15,7 +15,6 @@ export function findDealsForTrips(trips) {
       .add(months, 'months')
       .format('YYYY-MM')
   );
-  //   console.log(trips);
   trips.forEach(trip => {
     const { origins, destinations } = trip;
     const combinations = cartesian(

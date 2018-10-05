@@ -1,6 +1,5 @@
 import unirest from 'unirest';
 import { addToSkyscannerQueue } from './skyScannerQueue';
-console.log(addToSkyscannerQueue);
 
 export function querySkyscanner(requestObj) {
   const {
