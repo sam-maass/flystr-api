@@ -1,6 +1,6 @@
-import { findDealsForAllTrips } from './utils/crawler/findDealsForTrips';
 import { removeOldFlights } from './utils/flights/removeOldFlights';
 import { removeOutdatedFlights } from './utils/flights/removeOutdatedFlights';
+import { crawler } from './utils/skyscannerCrawler';
 
 setInterval(() => {
   removeOutdatedFlights();
@@ -8,6 +8,6 @@ setInterval(() => {
 
 // Update Flights every 6 hours
 setInterval(() => {
-  findDealsForAllTrips();
+  crawler('/crawl/trips/all');
   removeOldFlights();
 }, 6 * 60 * 60 * 1000);
