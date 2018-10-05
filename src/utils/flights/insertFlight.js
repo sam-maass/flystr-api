@@ -4,7 +4,7 @@ const { removeFlightById } = require('./removeFlightById');
 const { replaceFlightFromDeal } = require('../deals/replaceFlightFromDeal');
 const { augmentFlight } = require('./augmentFlight');
 const { matchFlightsWithTrips } = require('./matchFlightsWithTrips');
-async function insertFlight(flightData) {
+export async function insertFlight(flightData) {
   const augmentedFlight = await augmentFlight(flightData);
   const flight = new FlightModel(augmentedFlight);
   // check if it replaces old flight
@@ -18,4 +18,3 @@ async function insertFlight(flightData) {
   matchFlightsWithTrips([flight._id]);
   return flight;
 }
-exports.insertFlight = insertFlight;

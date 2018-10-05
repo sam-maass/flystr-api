@@ -2,7 +2,7 @@ const FlightModel = require('../../model/flightModel');
 const { removeFlightById } = require('./removeFlightById');
 const moment = require('moment');
 
-async function removeOldFlights() {
+export async function removeOldFlights() {
   const flights = await FlightModel.find({
     removed: { $ne: true },
     manuallyAdded: { $ne: true },
@@ -10,5 +10,3 @@ async function removeOldFlights() {
   });
   flights.forEach(removeFlightById);
 }
-
-exports.removeOldFlights = removeOldFlights;

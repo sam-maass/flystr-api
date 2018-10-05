@@ -3,7 +3,7 @@ const { findDealsForTrips } = require('../crawler/findDealsForTrips');
 
 const TripModel = require('../../model/tripModel');
 
-async function insertTrip(tripData, user) {
+export async function insertTrip(tripData, user) {
   const matchingFlights = await findMatchingFlights(tripData);
   const trip = new TripModel({
     ...tripData,
@@ -14,5 +14,3 @@ async function insertTrip(tripData, user) {
   findDealsForTrips([trip]);
   return trip;
 }
-
-exports.insertTrip = insertTrip;

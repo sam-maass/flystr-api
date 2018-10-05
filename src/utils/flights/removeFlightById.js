@@ -2,7 +2,7 @@ const { removeFlightFromDeal } = require('../deals/removeFlightFromDeal');
 const { removeFlightFromTrip } = require('../trips/removeFlightFromTrip');
 const FlightModel = require('../../model/flightModel');
 
-async function removeFlightById(flightId) {
+export async function removeFlightById(flightId) {
   console.log(`removing flight ${flightId}`);
 
   await FlightModel.findByIdAndUpdate(flightId, {
@@ -11,4 +11,3 @@ async function removeFlightById(flightId) {
   await removeFlightFromDeal(flightId);
   await removeFlightFromTrip(flightId);
 }
-exports.removeFlightById = removeFlightById;

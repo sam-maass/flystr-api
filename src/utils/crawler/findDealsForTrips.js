@@ -4,14 +4,12 @@ const TripModel = require('../../model/tripModel');
 const { addToSkyscannerQueue } = require('./skyScannerQueue');
 const moment = require('moment');
 const PlannedRequests = new Set();
-const findDealsForAllTrips = async () => {
+export const findDealsForAllTrips = async () => {
   const trips = await TripModel.find({ removed: { $ne: true } });
   findDealsForTrips(trips);
 };
-exports.findDealsForTrips = findDealsForTrips;
-exports.findDealsForAllTrips = findDealsForAllTrips;
 
-function findDealsForTrips(trips) {
+export function findDealsForTrips(trips) {
   const timeframes = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(months =>
     moment()
       .add(months, 'months')
