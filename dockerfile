@@ -3,6 +3,7 @@ WORKDIR /tmp
 COPY package.json /tmp/
 COPY package-lock.json /tmp/
 COPY /src /tmp/src
+COPY /bootstrap.js /tmp/bootstrap.js
 RUN apk add --no-cache --virtual .gyp python make g++ && npm install
 CMD npm run build
 
