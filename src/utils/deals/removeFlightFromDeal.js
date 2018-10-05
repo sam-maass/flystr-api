@@ -1,6 +1,6 @@
-const { removeEmptyDeals } = require('./removeEmptyDeals');
-const { recalculateDealData } = require('./recalculateDealData');
-const DealModel = require('../../model/dealModel');
+import { removeEmptyDeals } from './removeEmptyDeals';
+import { recalculateDealData } from './recalculateDealData';
+import DealModel from '../../model/dealModel';
 export async function removeFlightFromDeal(flightId) {
   const deals = await DealModel.find({
     exampleFlights: { $in: [flightId] }

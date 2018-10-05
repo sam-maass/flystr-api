@@ -1,4 +1,4 @@
-const FlightModel = require('../../model/flightModel');
+import FlightModel from '../../model/flightModel';
 export async function findMatchingFlights({
   budget,
   origins,

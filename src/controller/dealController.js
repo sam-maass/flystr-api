@@ -1,9 +1,9 @@
-const { getRelevantDeals } = require('../utils/deals/getRelevantDeals');
+import { getRelevantDeals } from '../utils/deals/getRelevantDeals';
 
-const { recalculateDealData } = require('../utils/deals/recalculateDealData');
-const DealModel = require('../model/dealModel');
-const UserModel = require('../model/userModel');
-const slugify = require('slugify');
+import { recalculateDealData } from '../utils/deals/recalculateDealData';
+import DealModel from '../model/dealModel';
+import UserModel from '../model/userModel';
+import slugify from 'slugify';
 
 const limitRemovedDeals = (deals, { limit }) => {
   let removedInResult = 0;

@@ -1,5 +1,5 @@
-const DealModel = require('../../model/dealModel');
-const moment = require('moment');
+import DealModel from '../../model/dealModel';
+import moment from 'moment';
 
 export const recalculateDealData = async ({ _id }) => {
   const dealData = await DealModel.findById(_id).populate('exampleFlights');

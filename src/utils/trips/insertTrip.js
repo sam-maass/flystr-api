@@ -1,7 +1,7 @@
-const { findMatchingFlights } = require('./findMatchingFlights');
-const { findDealsForTrips } = require('../crawler/findDealsForTrips');
+import { findMatchingFlights } from './findMatchingFlights';
+import { findDealsForTrips } from '../crawler/findDealsForTrips';
 
-const TripModel = require('../../model/tripModel');
+import TripModel from '../../model/tripModel';
 
 export async function insertTrip(tripData, user) {
   const matchingFlights = await findMatchingFlights(tripData);

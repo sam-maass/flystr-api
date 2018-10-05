@@ -1,6 +1,6 @@
-const { removeFlightFromDeal } = require('../deals/removeFlightFromDeal');
-const { removeFlightFromTrip } = require('../trips/removeFlightFromTrip');
-const FlightModel = require('../../model/flightModel');
+import { removeFlightFromDeal } from '../deals/removeFlightFromDeal';
+import { removeFlightFromTrip } from '../trips/removeFlightFromTrip';
+import FlightModel from '../../model/flightModel';
 
 export async function removeFlightById(flightId) {
   console.log(`removing flight ${flightId}`);

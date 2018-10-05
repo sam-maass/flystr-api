@@ -1,6 +1,6 @@
-const { querySkyscanner } = require('./querySkyscanner');
-const { insertFlight } = require('../flights/insertFlight');
-const moment = require('moment');
+import { querySkyscanner } from './querySkyscanner';
+import { insertFlight } from '../flights/insertFlight';
+import moment from 'moment';
 
 export async function getQuotes({
   origin,

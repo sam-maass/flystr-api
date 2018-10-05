@@ -1,9 +1,9 @@
-const FlightModel = require('../../model/flightModel');
-const { findDuplicateFlight } = require('./findDuplicateFlight');
-const { removeFlightById } = require('./removeFlightById');
-const { replaceFlightFromDeal } = require('../deals/replaceFlightFromDeal');
-const { augmentFlight } = require('./augmentFlight');
-const { matchFlightsWithTrips } = require('./matchFlightsWithTrips');
+import FlightModel from '../../model/flightModel';
+import { findDuplicateFlight } from './findDuplicateFlight';
+import { removeFlightById } from './removeFlightById';
+import { replaceFlightFromDeal } from '../deals/replaceFlightFromDeal';
+import { augmentFlight } from './augmentFlight';
+import { matchFlightsWithTrips } from './matchFlightsWithTrips';
 export async function insertFlight(flightData) {
   const augmentedFlight = await augmentFlight(flightData);
   const flight = new FlightModel(augmentedFlight);

@@ -1,8 +1,8 @@
-const { cartesian } = require('./cartesian');
+import { cartesian } from './cartesian';
 
-const TripModel = require('../../model/tripModel');
-const { addToSkyscannerQueue } = require('./skyScannerQueue');
-const moment = require('moment');
+import TripModel from '../../model/tripModel';
+import { addToSkyscannerQueue } from './skyScannerQueue';
+import moment from 'moment';
 const PlannedRequests = new Set();
 export const findDealsForAllTrips = async () => {
   const trips = await TripModel.find({ removed: { $ne: true } });

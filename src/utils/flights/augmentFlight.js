@@ -1,5 +1,5 @@
-const AirportModel = require('../../model/airportModel');
-const moment = require('moment');
+import AirportModel from '../../model/airportModel';
+import moment from 'moment';
 export const augmentFlight = async flight => {
   delete flight._id;
   delete flight.createdAt;

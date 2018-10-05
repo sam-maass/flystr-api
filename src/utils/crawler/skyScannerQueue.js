@@ -1,6 +1,6 @@
-const { getQuotes } = require('./getQuotes');
+import { getQuotes } from './getQuotes';
 const skyScannerQueue = [];
-const SkycannerApiLimitPerMinute = 600;
+const SKYSCANNER_RATE_LIMIT = 300;
 
 export function addToSkyscannerQueue(item) {
   return skyScannerQueue.push(item);
@@ -12,4 +12,4 @@ setInterval(() => {
     getQuotes(nextQuoteRequest);
     console.log(`${skyScannerQueue.length} items left in queue`);
   }
-}, (1000 * 60) / SkycannerApiLimitPerMinute);
+}, (1000 * 60) / SKYSCANNER_RATE_LIMIT);

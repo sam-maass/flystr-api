@@ -1,5 +1,5 @@
-const unirest = require('unirest');
-const { addToSkyscannerQueue } = require('./skyScannerQueue');
+import unirest from 'unirest';
+import { addToSkyscannerQueue } from './skyScannerQueue';
 console.log(addToSkyscannerQueue);
 
 export function querySkyscanner(requestObj) {
@@ -21,12 +21,11 @@ export function querySkyscanner(requestObj) {
         'skyscanner-skyscanner-flight-search-v1.p.mashape.com'
       )
       .end(result => {
-        addToSkyscannerQueue(requestObj);
         const { status, headers, body } = result;
         if (status === 200) resolve({ status, headers, body });
         else {
           console.error(status, body);
-          addToSkyscannerQueue(requestObj);
+          addToSkyscannerQueue(requestObj); // add item to queue again
           reject({ status, headers, body });
         }
       });

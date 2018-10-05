@@ -1,4 +1,4 @@
-const TripModel = require('../../model/tripModel');
+import TripModel from '../../model/tripModel';
 export async function removeFlightFromTrip(flightId) {
   await TripModel.updateMany(
     { matchingFlights: { $in: [flightId] } },
