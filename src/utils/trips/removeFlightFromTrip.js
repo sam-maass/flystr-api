@@ -1,7 +1,5 @@
-const TripModel = require('../../model/tripModel');
-async function removeFlightFromTrip(flightId) {
-  console.log('remove flight from trip');
-
+import TripModel from '../../model/tripModel';
+export async function removeFlightFromTrip(flightId) {
   await TripModel.updateMany(
     { matchingFlights: { $in: [flightId] } },
     {
@@ -9,4 +7,3 @@ async function removeFlightFromTrip(flightId) {
     }
   );
 }
-exports.removeFlightFromTrip = removeFlightFromTrip;

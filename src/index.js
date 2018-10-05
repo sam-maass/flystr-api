@@ -1,7 +1,8 @@
-const bodyParser = require('body-parser');
-const express = require('express');
-const morgan = require('morgan');
-const mongoose = require('mongoose');
+import 'babel-polyfill';
+import bodyParser from 'body-parser';
+import express from 'express';
+import morgan from 'morgan';
+import mongoose from 'mongoose';
 
 const { PORT, MONGO_URL } = process.env;
 

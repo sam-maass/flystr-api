@@ -1,14 +1,8 @@
-const FlightModel = require('../model/flightModel');
+import { insertFlight } from '../utils/flights/insertFlight';
 
-const { findDuplicateFlight } = require('../utils/flights/findDuplicateFlight');
-const { removeFlightById } = require('../utils/flights/removeFlightById');
-const {
-  replaceFlightFromDeal
-} = require('../utils/deals/replaceFlightFromDeal');
-const { augmentFlight } = require('../utils/flights/augmentFlight');
-const {
-  matchFlightsWithTrips
-} = require('../utils/flights/matchFlightsWithTrips');
+import FlightModel from '../model/flightModel';
+
+import { removeFlightById } from '../utils/flights/removeFlightById';
 
 module.exports = {
   get: async (req, res) => {
@@ -27,20 +21,8 @@ module.exports = {
   },
 
   insert: async (req, res) => {
-    const augmentedFlight = await augmentFlight(req.body.flight);
-    const flight = new FlightModel(augmentedFlight);
-
-    // check if it replaces old flight
-    const oldFlight = await findDuplicateFlight(flight);
-    if (oldFlight) {
-      await replaceFlightFromDeal(oldFlight._id, flight._id);
-      await removeFlightById(oldFlight._id);
-      // add new flight to deal
-    }
-
-    await flight.save();
-    matchFlightsWithTrips([flight._id]);
-
+    const { flight: flightData } = req.body;
+    const flight = await insertFlight(flightData);
     res.status(200).json({ ...flight });
   }
 };

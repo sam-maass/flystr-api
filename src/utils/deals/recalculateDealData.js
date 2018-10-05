@@ -1,7 +1,7 @@
-const DealModel = require('../../model/dealModel');
-const moment = require('moment');
+import DealModel from '../../model/dealModel';
+import moment from 'moment';
 
-const recalculateDealData = async ({ _id }) => {
+export const recalculateDealData = async ({ _id }) => {
   const dealData = await DealModel.findById(_id).populate('exampleFlights');
   const flights = dealData.exampleFlights;
   const destinations = [
@@ -30,4 +30,3 @@ const recalculateDealData = async ({ _id }) => {
     }
   });
 };
-exports.recalculateDealData = recalculateDealData;
