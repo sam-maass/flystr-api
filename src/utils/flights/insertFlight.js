@@ -15,6 +15,8 @@ export async function insertFlight(flightData) {
     // add new flight to deal
   }
   await flight.save();
-  matchFlightsWithTrips([flight._id]);
+  if (flight.manuallyAdded) {
+    matchFlightsWithTrips([flight._id]);
+  }
   return flight;
 }

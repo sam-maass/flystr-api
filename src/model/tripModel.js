@@ -15,7 +15,9 @@ const tripSchema = new Schema(
     createdAt: Date,
     updatedAt: Date,
     fromDuration: Number,
-    toDuration: Number
+    toDuration: Number,
+    minPrice: Number,
+    currency: String
   },
   { timestamps: true }
 );
