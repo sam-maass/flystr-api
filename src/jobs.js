@@ -9,5 +9,8 @@ setInterval(() => {
 // Update Flights every 6 hours
 setInterval(() => {
   crawler('/crawl/trips/all');
+  crawler('/crawl/deals/all');
   removeOldFlights();
 }, 6 * 60 * 60 * 1000);
+
+removeOldFlights();
