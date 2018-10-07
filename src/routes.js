@@ -24,6 +24,7 @@ router.post('/trips/:tripId', authenticate, TripController.update);
 router.delete('/trips/:tripId', authenticate, TripController.delete);
 router.post('/trips', authenticate, TripController.insert);
 router.get('/trips', authenticate, TripController.getUserTripsWithDeals);
+router.get('/trip/:tripId', authenticate, TripController.getUserTripWithDeals);
 router.get('/trips/all', authenticateAdmin, TripController.getAllTrips);
 
 // router.post('/deal/:dealId', authenticateAdmin, DealController.update);
