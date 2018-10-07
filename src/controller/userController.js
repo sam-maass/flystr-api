@@ -11,9 +11,9 @@ module.exports = {
       res.status(501);
       return;
     }
-    const trips = await TripModel.find({ user: req.user._id })
-      .populate('matchingFlights')
-      .sort({ createdAt: -1 });
+    const trips = await TripModel.find({ user: req.user._id }).sort({
+      createdAt: -1
+    });
     res.status(200).json({ user, trips });
   },
 

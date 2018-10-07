@@ -75,7 +75,7 @@ module.exports = {
     const tripId = req.params.tripId;
     const user = await UserModel.findById(req.user._id);
     if (user) {
-      const trips = await TripModel.find({
+      const trips = await TripModel.findOne({
         _id: tripId,
         user: req.user._id,
         matchingFlights: { $ne: [] }
