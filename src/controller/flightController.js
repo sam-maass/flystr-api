@@ -6,7 +6,10 @@ import { removeFlightById } from '../utils/flights/removeFlightById';
 
 module.exports = {
   get: async (req, res) => {
-    const flights = await FlightModel.find({ removed: { $ne: true } }).sort({
+    const flights = await FlightModel.find({
+      removed: { $ne: true },
+      manuallyAdded: true
+    }).sort({
       createdAt: -1
     });
     res.status(200).json(flights);
