@@ -7,7 +7,7 @@ import mongoose from 'mongoose';
 const { PORT, MONGO_URL } = process.env;
 
 const app = express();
-app.use(morgan('combined'));
+app.use(morgan('short'));
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 
