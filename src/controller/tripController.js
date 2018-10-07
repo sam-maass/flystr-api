@@ -75,12 +75,12 @@ module.exports = {
     const tripId = req.params.tripId;
     const user = await UserModel.findById(req.user._id);
     if (user) {
-      const trips = await TripModel.findOne({
+      const trip = await TripModel.findOne({
         _id: tripId,
-        user: req.user._id,
-        matchingFlights: { $ne: [] }
+        user: req.user._id
       }).populate('matchingFlights');
-      res.status(200).json(trips);
+
+      res.status(200).json(trip);
     } else res.status(500).json({ error: 'Unable to find user' });
   }
 };
