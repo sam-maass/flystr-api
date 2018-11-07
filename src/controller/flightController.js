@@ -25,6 +25,7 @@ module.exports = {
 
   insert: async (req, res) => {
     const { flight: flightData } = req.body;
+    console.log(flightData);
     const flight = await insertFlight(flightData);
     res.status(200).json({ ...flight });
   }
