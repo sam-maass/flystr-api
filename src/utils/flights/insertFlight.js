@@ -7,8 +7,12 @@ import { matchFlightsWithTrips } from './matchFlightsWithTrips';
 export async function insertFlight(flightData) {
   const augmentedFlight = await augmentFlight(flightData);
   const flight = new FlightModel(augmentedFlight);
+  console.log({ flight });
+
   // check if it replaces old flight
   const oldFlight = await findDuplicateFlight(flight);
+  console.log({ oldFlight });
+
   if (oldFlight) {
     await replaceFlightFromDeal(oldFlight._id, flight._id);
     await removeFlightById(oldFlight._id);

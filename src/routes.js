@@ -6,6 +6,7 @@ import TripController from './controller/tripController';
 import DealController from './controller/dealController';
 import FlightController from './controller/flightController';
 import AirportController from './controller/airportController';
+import NotificationController from './controller/notificationController';
 const {
   authenticate,
   validateToken,
@@ -19,6 +20,12 @@ router.post('/user/login-email', UserController.loginWithEmail);
 router.post('/user/logout', authenticate, UserController.logout);
 router.get('/user/refreshToken', authenticate, UserController.refreshToken);
 router.get('/user/profile', authenticate, UserController.getProfile);
+router.get('/user/notifications', authenticate, NotificationController.get);
+router.put(
+  '/user/notifications/seen',
+  authenticate,
+  NotificationController.markAsRead
+);
 
 router.post('/trips/:tripId', authenticate, TripController.update);
 router.delete('/trips/:tripId', authenticate, TripController.delete);

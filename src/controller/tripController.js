@@ -59,13 +59,13 @@ module.exports = {
   getUserTripsWithDeals: async (req, res) => {
     const user = await UserModel.findById(req.user._id);
     if (user) {
-      const trips = await TripModel.find({
+      const trip = await TripModel.find({
         user: req.user._id,
         matchingFlights: { $ne: [] }
       })
-        .sort({ createdAt: -1 })
-        .populate('matchingFlights');
-      res.status(200).json(trips);
+        .populate('matchingFlights')
+        .sort({ createdAt: -1 });
+      res.status(200).json(trip);
     } else {
       res.status(500).json({ error: 'Unable to find user' });
     }
@@ -79,7 +79,6 @@ module.exports = {
         _id: tripId,
         user: req.user._id
       }).populate('matchingFlights');
-
       res.status(200).json(trip);
     } else res.status(500).json({ error: 'Unable to find user' });
   }
