@@ -1,4 +1,5 @@
 import { getRelevantDeals } from '../utils/deals/getRelevantDeals';
+import { crawler } from '../utils/skyscannerCrawler';
 
 import { recalculateDealData } from '../utils/deals/recalculateDealData';
 import DealModel from '../model/dealModel';
@@ -72,7 +73,8 @@ module.exports = {
       await deal.save();
       console.log(deal);
 
-      recalculateDealData(deal._id);
+      await recalculateDealData(deal._id);
+      crawler(`/crawl/deals/${deal._id}`);
       res.status(200).json({ deal });
     } else {
       res.status(500).json({ error: 'Unable to save deal' });
