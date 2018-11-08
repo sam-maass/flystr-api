@@ -11,9 +11,6 @@ export async function insertTrip(tripData, user) {
     matchingFlights
   });
   await trip.save();
-  console.log('adding new trip');
-  console.log(crawler);
-
   crawler(`/crawl/trips/${trip._id}`);
   return trip;
 }
