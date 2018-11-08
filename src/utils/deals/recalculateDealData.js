@@ -2,8 +2,9 @@ import DealModel from '../../model/dealModel';
 import moment from 'moment';
 
 export const recalculateDealData = async ({ _id }) => {
-  const dealData = await DealModel.findById(_id).populate('exampleFlights');
-  const flights = dealData.exampleFlights;
+  const deal = await DealModel.findById(_id).populate('exampleFlights');
+  const { exampleFlights: flights } = deal;
+  let { priceLimit } = deal;
   const destinations = [
     ...new Set([...flights.map(flight => flight.outDestination)])
   ];
@@ -17,9 +18,11 @@ export const recalculateDealData = async ({ _id }) => {
   const lastReturn = moment
     .max(...flights.map(f => moment(f.inDate)))
     .format('YYYY-MM-DD');
+  if (!priceLimit) priceLimit = minPrice * 1.35;
 
   await DealModel.findByIdAndUpdate(_id, {
     $set: {
+      priceLimit,
       lastChecked,
       destinations,
       currency,
