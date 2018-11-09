@@ -66,6 +66,7 @@ module.exports = {
       returnError.duplicateUser(res);
     } else {
       const user = new UserModel({ ...req.user, created: new Date() });
+      await updateJWT(user);
       user.save();
       sendSignupEmail(user.email);
       res.status(200).json(user);
