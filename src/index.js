@@ -3,8 +3,6 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import morgan from 'morgan';
 import mongoose from 'mongoose';
-import path from 'path';
-import fs from 'fs';
 
 const { PORT, MONGO_URL } = process.env;
 
@@ -17,14 +15,6 @@ app.use(
   })
 );
 
-// log all requests to access.log
-app.use(
-  morgan('common', {
-    stream: fs.createWriteStream(path.join(__dirname, '/../access.log'), {
-      flags: 'a'
-    })
-  })
-);
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
 
