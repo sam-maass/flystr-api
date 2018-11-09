@@ -11,6 +11,4 @@ setInterval(() => {
   crawler('/crawl/trips/all');
   crawler('/crawl/deals/all');
   removeOldFlights();
-}, 6 * 60 * 60 * 1000);
-
-removeOldFlights();
+}, 3 * 60 * 60 * 1000);
