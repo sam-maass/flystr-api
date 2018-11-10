@@ -8,6 +8,6 @@ export async function removeFlightFromDeal(flightId) {
   await DealModel.updateMany({
     $pull: { exampleFlights: { $in: [flightId] } }
   });
-  deals.forEach(recalculateDealData);
+  deals.forEach(deal => recalculateDealData(deal._id));
   await removeEmptyDeals();
 }

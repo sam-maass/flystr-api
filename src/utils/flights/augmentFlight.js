@@ -32,6 +32,8 @@ const populateAirports = async flight => {
   const outOriginDetails = await getAirport(flight.outOrigin);
   const outDestinationDetails = await getAirport(flight.outDestination);
   return {
+    outDate: moment(flight.outDate).format('YYYY-MM-DD'),
+    inDate: moment(flight.inDate).format('YYYY-MM-DD'),
     inOriginDetails,
     inDestinationDetails,
     outOriginDetails,
