@@ -23,13 +23,13 @@ module.exports = {
     const { activeDeal } = req.query;
     if (activeDeal) {
       const deals = await getRelevantDeals(activeDeal);
-      const limitedDeals = limitRemovedDeals(deals, { limit: 5 });
+      const limitedDeals = limitRemovedDeals(deals, { limit: 2 });
       res.status(200).json(limitedDeals);
     } else {
       const deals = await DealModel.find()
         .sort({ createdAt: -1 })
         .populate('exampleFlights');
-      const limitedDeals = limitRemovedDeals(deals, { limit: 5 });
+      const limitedDeals = limitRemovedDeals(deals, { limit: 2 });
       res.status(200).json(limitedDeals);
     }
   },
