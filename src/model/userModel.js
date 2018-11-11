@@ -13,7 +13,11 @@ const userSchema = new Schema(
     pwHash: String,
     created: Date,
     lastLogin: Date,
-    isAdmin: Boolean
+    isAdmin: Boolean,
+    settings: {
+      pushNotificationsActive: Boolean,
+      pushSubscription: Object
+    }
   },
   { timestamps: true }
 );

@@ -18,6 +18,7 @@ router.post('/user/signup-email', UserController.signupWithEmail);
 router.post('/user/login', validateToken, UserController.login);
 router.post('/user/login-email', UserController.loginWithEmail);
 router.post('/user/logout', authenticate, UserController.logout);
+router.put('/user', authenticate, UserController.update);
 router.get('/user/refreshToken', authenticate, UserController.refreshToken);
 router.get('/user/profile', authenticate, UserController.getProfile);
 router.get('/user/notifications', authenticate, NotificationController.get);
