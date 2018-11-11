@@ -27,6 +27,7 @@ router.put(
   authenticate,
   NotificationController.markAsRead
 );
+router.get('/push-notification/:notificationId', NotificationController.getOne);
 
 router.post('/trips/:tripId', authenticate, TripController.update);
 router.delete('/trips/:tripId', authenticate, TripController.delete);
