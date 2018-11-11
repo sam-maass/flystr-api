@@ -71,7 +71,6 @@ module.exports = {
         slug: slugify(`${title} from ${subtitle}`, { lower: true })
       });
       await deal.save();
-      console.log(deal);
 
       await recalculateDealData(deal._id);
       crawler(`/crawl/deals/${deal._id}`);
