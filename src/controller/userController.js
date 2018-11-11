@@ -6,11 +6,9 @@ import { sendSignupEmail } from '../sendMail';
 
 module.exports = {
   update: async (req, res) => {
-    console.log(req.body);
     const user = await UserModel.findById(req.user._id);
     user.set({ settings: req.body });
     await user.save();
-    console.log(user);
 
     res.status(200).json(user);
   },
