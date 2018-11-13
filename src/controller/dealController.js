@@ -1,10 +1,8 @@
 import { getRelevantDeals } from '../utils/deals/getRelevantDeals';
-import { crawler } from '../utils/skyscannerCrawler';
-
-import { recalculateDealData } from '../utils/deals/recalculateDealData';
 import DealModel from '../model/dealModel';
+import TripModel from '../model/tripModel';
 import UserModel from '../model/userModel';
-import slugify from 'slugify';
+import { insertDeal } from '../utils/deals/insertDeal';
 
 const limitRemovedDeals = (deals, { limit }) => {
   let removedInResult = 0;
@@ -62,18 +60,13 @@ module.exports = {
   insert: async (req, res) => {
     const user = await UserModel.findById(req.user._id);
     if (user) {
-      const { title, subtitle, exampleFlights } = req.body;
-      const deal = new DealModel({
-        title,
-        subtitle,
-        exampleFlights,
-        user,
-        slug: slugify(`${title} from ${subtitle}`, { lower: true })
-      });
-      await deal.save();
-
-      await recalculateDealData(deal._id);
-      crawler(`/crawl/deals/${deal._id}`);
+      const { title, subtitle, exampleFlights, tripId } = req.body;
+      let flights = exampleFlights;
+      if (tripId) {
+        const { matchingFlights } = await TripModel.findById(tripId);
+        flights = matchingFlights;
+      }
+      const deal = await insertDeal(title, subtitle, flights, user);
       res.status(200).json({ deal });
     } else {
       res.status(500).json({ error: 'Unable to save deal' });
