@@ -53,7 +53,7 @@ module.exports = {
       res.status(500).json({ error: error.message });
       await user
         .set({
-          stripeCustomer: null
+          stripeCustomer: {}
         })
         .save();
       console.log({ error });
