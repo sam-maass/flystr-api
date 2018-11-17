@@ -18,8 +18,9 @@ const livePlanMap = {
   monthly: 'plan_DzVib5ratv5bxu'
 };
 
-const planMap =
-  process.env.NODE_ENV === 'production' ? livePlanMap : testPlanMap;
+const planMap = process.env.STRIPE_SECRET_KEY.includes('live')
+  ? livePlanMap
+  : testPlanMap;
 
 module.exports = {
   premiumSignup: async (req, res) => {
