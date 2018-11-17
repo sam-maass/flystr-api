@@ -14,6 +14,9 @@ const userSchema = new Schema(
     created: Date,
     lastLogin: Date,
     isAdmin: Boolean,
+    stripeCustomer: Object,
+    stripeSubscription: Object,
+    accountType: String,
     settings: {
       pushNotificationsActive: Boolean,
       pushSubscription: Object
