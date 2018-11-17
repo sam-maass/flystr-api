@@ -3,8 +3,55 @@ import TripModel from '../model/tripModel';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { sendSignupEmail } from '../sendMail';
+import _stripe from 'stripe';
+const stripe = _stripe(process.env.STRIPE_SECRET_KEY);
+
+const planMap = {
+  yearly: 'plan_DyT7Ja2b6b4wUA',
+  quarterly: 'plan_DyT6OjnMgIHzf9',
+  monthly: 'plan_DyT5LWQLfCugA3'
+};
 
 module.exports = {
+  premiumSignup: async (req, res) => {
+    const { _id: userId } = req.user;
+    const { token, selectedPlan } = req.body;
+    const plan = planMap[selectedPlan];
+    const user = await UserModel.findById(userId);
+    let { stripeCustomer = {} } = user;
+    if (!stripeCustomer.id) {
+      stripeCustomer = await createStripeCustomer(user, token, userId, res);
+    }
+    if (!stripeCustomer.id) return;
+    try {
+      const stripeSubscription = await stripe.subscriptions.create({
+        customer: stripeCustomer.id,
+        items: [
+          {
+            plan
+          }
+        ]
+      });
+      if (stripeSubscription) {
+        await user
+          .set({
+            stripeSubscription
+          })
+          .save();
+      }
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+      await user
+        .set({
+          stripeCustomer: null
+        })
+        .save();
+      console.log({ error });
+      return;
+    }
+
+    res.status(200).json(user);
+  },
   update: async (req, res) => {
     const user = await UserModel.findById(req.user._id);
     user.set({ settings: req.body });
@@ -99,6 +146,21 @@ module.exports = {
     }
   }
 };
+
+async function createStripeCustomer(user, token, userId, res) {
+  try {
+    const stripeCustomer = await stripe.customers.create({
+      email: user.email,
+      source: token.id,
+      metadata: { userId }
+    });
+    await user.set({ stripeCustomer }).save();
+    return stripeCustomer;
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+    console.log({ error });
+  }
+}
 
 async function updateJWT(user) {
   const { _id, isAdmin } = user;
