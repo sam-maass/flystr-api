@@ -6,11 +6,20 @@ import { sendSignupEmail } from '../sendMail';
 import _stripe from 'stripe';
 const stripe = _stripe(process.env.STRIPE_SECRET_KEY);
 
-const planMap = {
+const testPlanMap = {
   yearly: 'plan_DyT7Ja2b6b4wUA',
   quarterly: 'plan_DyT6OjnMgIHzf9',
   monthly: 'plan_DyT5LWQLfCugA3'
 };
+
+const livePlanMap = {
+  yearly: 'plan_DzVjARlNHnHJ4S',
+  quarterly: 'plan_DzVi8IX3omjtpA',
+  monthly: 'plan_DzVib5ratv5bxu'
+};
+
+const planMap =
+  process.env.NODE_ENV === 'production' ? livePlanMap : testPlanMap;
 
 module.exports = {
   premiumSignup: async (req, res) => {
