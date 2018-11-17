@@ -4,11 +4,22 @@ import { findMatchingFlights } from '../utils/trips/findMatchingFlights';
 import TripModel from '../model/tripModel';
 import UserModel from '../model/userModel';
 
+const FREE_USER_TRIP_LIMIT = 1;
+
 module.exports = {
   insert: async (req, res) => {
     const user = await UserModel.findById(req.user._id);
     if (!user) {
       return res.status(500).json({ error: 'Unable to save trip' });
+    }
+    const userTrips = await TripModel.find({ user: req.user._id });
+    if (
+      !user.stripeSubscription &&
+      userTrips.length + 1 > FREE_USER_TRIP_LIMIT
+    ) {
+      return res.status(500).json({
+        error: 'Free Account limit reached. Upgrade to Premium for more trips'
+      });
     }
     const tripData = req.body;
     const trip = await insertTrip(tripData, user);
