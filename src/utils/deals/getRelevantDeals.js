@@ -1,4 +1,5 @@
 import DealModel from '../../model/dealModel';
+
 export async function getRelevantDeals(activeDeal) {
   const deal = await getExactDeal(activeDeal);
   const origins = deal ? deal[0].origins : [];
@@ -11,9 +12,7 @@ async function getOtherDeals(activeDeal, origins) {
   return await DealModel.find({
     slug: { $ne: activeDeal },
     origins: { $nin: origins }
-  })
-    .sort({ createdAt: -1 })
-    .populate('exampleFlights');
+  }).sort({ createdAt: -1 });
 }
 
 function getSameOriginDeals(activeDeal, origins) {
@@ -21,13 +20,11 @@ function getSameOriginDeals(activeDeal, origins) {
     removed: { $ne: true },
     slug: { $ne: activeDeal },
     origins: { $in: origins }
-  })
-    .sort({ createdAt: -1 })
-    .populate('exampleFlights');
+  }).sort({ createdAt: -1 });
 }
 
 async function getExactDeal(activeDeal) {
   return await DealModel.find({
     slug: activeDeal
-  }).populate('exampleFlights');
+  });
 }
