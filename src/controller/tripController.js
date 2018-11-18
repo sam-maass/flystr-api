@@ -4,7 +4,7 @@ import { findMatchingFlights } from '../utils/trips/findMatchingFlights';
 import TripModel from '../model/tripModel';
 import UserModel from '../model/userModel';
 
-const FREE_USER_TRIP_LIMIT = 1;
+const FREE_USER_TRIP_LIMIT = 2;
 
 module.exports = {
   insert: async (req, res) => {
