@@ -33,4 +33,4 @@ const dealSchema = new Schema(
 
 const DealModel = mongoose.model('Deal', dealSchema);
 
-module.exports = DealModel;
+export default DealModel;
