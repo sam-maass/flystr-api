@@ -128,10 +128,10 @@ module.exports = {
   },
 
   signup: async (req, res) => {
-    const exisitingUser = await UserModel.findOne({
+    const existingUser = await UserModel.findOne({
       googleId: req.user.googleId
     });
-    if (exisitingUser) {
+    if (existingUser) {
       returnError.duplicateUser(res);
     } else {
       const user = new UserModel({ ...req.user, created: new Date() });
@@ -143,10 +143,10 @@ module.exports = {
   },
 
   signupWithEmail: async (req, res) => {
-    const exisitingUser = await UserModel.findOne({
+    const existingUser = await UserModel.findOne({
       email: req.body.email
     });
-    if (exisitingUser) {
+    if (existingUser) {
       returnError.duplicateUser(res);
     } else {
       const user = new UserModel({
