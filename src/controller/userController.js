@@ -34,21 +34,7 @@ module.exports = {
     }
     if (!stripeCustomer.id) return;
     try {
-      const stripeSubscription = await stripe.subscriptions.create({
-        customer: stripeCustomer.id,
-        items: [
-          {
-            plan
-          }
-        ]
-      });
-      if (stripeSubscription) {
-        await user
-          .set({
-            stripeSubscription
-          })
-          .save();
-      }
+      await createSubscription(stripeCustomer, plan, user);
     } catch (error) {
       res.status(500).json({ error: error.message });
       await user
@@ -61,6 +47,24 @@ module.exports = {
     }
 
     res.status(200).json(user);
+  },
+
+  cancelSubscription: async (req, res) => {
+    const user = await UserModel.findById(req.user._id);
+    let subscription_id;
+    try {
+      subscription_id = user.stripeSubscription.id;
+    } catch (error) {
+      res.status(500).json({ error: 'Found no subscription to cancel' });
+      console.error('Cant cancel user subscription for user:', req.user._id);
+      return;
+    }
+    const sub = await stripe.subscriptions.update(subscription_id, {
+      cancel_at_period_end: true
+    });
+    await user.set({ stripeSubscription: sub }).save();
+    res.status(200).json(user);
+    console.log(sub);
   },
   update: async (req, res) => {
     const user = await UserModel.findById(req.user._id);
@@ -156,6 +160,24 @@ module.exports = {
     }
   }
 };
+
+async function createSubscription(stripeCustomer, plan, user) {
+  const stripeSubscription = await stripe.subscriptions.create({
+    customer: stripeCustomer.id,
+    items: [
+      {
+        plan
+      }
+    ]
+  });
+  if (stripeSubscription) {
+    await user
+      .set({
+        stripeSubscription
+      })
+      .save();
+  }
+}
 
 async function createStripeCustomer(user, token, userId, res) {
   try {
