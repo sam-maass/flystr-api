@@ -178,7 +178,7 @@ async function updateJWT(user) {
     { user: { _id, isAdmin } },
     process.env.JWT_SECRET,
     {
-      expiresIn: '15m',
+      expiresIn: '5d',
       issuer: 'flystr'
     }
   );
