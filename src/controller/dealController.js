@@ -24,7 +24,10 @@ module.exports = {
       const limitedDeals = limitRemovedDeals(deals, { limit: 2 });
       res.status(200).json(limitedDeals);
     } else {
-      const deals = await DealModel.find().sort({ createdAt: -1 });
+      const deals = await DealModel.find(
+        {},
+        { exampleFlights: 0, priceHistory: 0 }
+      ).sort({ createdAt: -1 });
       const limitedDeals = limitRemovedDeals(deals, { limit: 2 });
       res.status(200).json(limitedDeals);
     }

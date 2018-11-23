@@ -10,7 +10,10 @@ import DealModel from '../../model/dealModel';
 export async function getRelevantDeals(activeDeal) {
   const deal = await getExactDeal(activeDeal);
   if (!deal) {
-    return DealModel.find({ removed: { $ne: true } }).sort({ createdAt: -1 });
+    return DealModel.find(
+      { removed: { $ne: true } },
+      { exampleFlights: 0, priceHistory: 0 }
+    ).sort({ createdAt: -1 });
   }
   const origins = deal ? deal.origins : [];
   const sameAirportDeals = await getSameOriginDeals(activeDeal, origins);
@@ -26,10 +29,13 @@ export async function getRelevantDeals(activeDeal) {
  * @param {string[]} origins
  */
 async function getOtherDeals(slug, origins) {
-  return await DealModel.find({
-    slug: { $ne: slug },
-    origins: { $nin: origins }
-  }).sort({ createdAt: -1 });
+  return await DealModel.find(
+    {
+      slug: { $ne: slug },
+      origins: { $nin: origins }
+    },
+    { exampleFlights: 0, priceHistory: 0 }
+  ).sort({ createdAt: -1 });
 }
 
 /**
@@ -39,11 +45,14 @@ async function getOtherDeals(slug, origins) {
  * @param {string[]} origins
  */
 function getSameOriginDeals(slug, origins) {
-  return DealModel.find({
-    removed: { $ne: true },
-    slug: { $ne: slug },
-    origins: { $in: origins }
-  }).sort({ createdAt: -1 });
+  return DealModel.find(
+    {
+      removed: { $ne: true },
+      slug: { $ne: slug },
+      origins: { $in: origins }
+    },
+    { exampleFlights: 0, priceHistory: 0 }
+  ).sort({ createdAt: -1 });
 }
 
 /**
