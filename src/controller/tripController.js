@@ -2,7 +2,9 @@ import { insertTrip } from '../utils/trips/insertTrip';
 import { findMatchingFlights } from '../utils/trips/findMatchingFlights';
 
 import TripModel from '../model/tripModel';
+import DealModel from '../model/dealModel';
 import UserModel from '../model/userModel';
+import moment from 'moment';
 
 const FREE_USER_TRIP_LIMIT = 2;
 
@@ -18,10 +20,35 @@ module.exports = {
       userTrips.length + 1 > FREE_USER_TRIP_LIMIT
     ) {
       return res.status(500).json({
-        error: 'Free Account limit reached. Upgrade to Premium for more trips'
+        error:
+          'You reached the trip limit of the free account. Upgrade to Premium for more trips'
       });
     }
-    const tripData = req.body;
+    let tripData = req.body;
+    if (tripData.dealId) {
+      const duplicateTrip = await TripModel.findOne({
+        user: user._id,
+        fromDealId: tripData.dealId
+      });
+      if (duplicateTrip) {
+        res.status(500).json({ error: 'You have already copied this deal' });
+        return;
+      }
+      const deal = await DealModel.findById(tripData.dealId);
+      tripData = {
+        destinations: deal.destinations,
+        origins: deal.origins,
+        startDate: new Date(),
+        endDate: moment()
+          .add(10, 'month')
+          .endOf('month')
+          .toDate(),
+        name: deal.title,
+        budget: Math.round(deal.minPrice * 1.5),
+        fromDealId: tripData.dealId
+      };
+    }
+    console.log({ tripData });
     const trip = await insertTrip(tripData, user);
     res.status(200).json(trip);
   },
