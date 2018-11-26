@@ -18,6 +18,7 @@ const userSchema = new Schema(
     stripeSubscription: Object,
     accountType: String,
     settings: {
+      emailNotificationsActive: Boolean,
       pushNotificationsActive: Boolean,
       pushSubscription: Object
     }
