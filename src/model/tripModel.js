@@ -17,7 +17,8 @@ const tripSchema = new Schema(
     fromDuration: Number,
     toDuration: Number,
     minPrice: Number,
-    currency: String
+    currency: String,
+    fromDealId: { type: mongoose.Schema.Types.ObjectId, ref: 'Deal' }
   },
   { timestamps: true }
 );
