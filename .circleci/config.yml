@@ -23,7 +23,7 @@ jobs:
           working_directory:
           command: |
             sudo apt-get -y -qq update
-            sudo apt-get -y -qq install python3.7-dev
+            sudo apt-get -y -qq install python3
       # Download and cache dependencies
       - restore_cache:
           keys:
