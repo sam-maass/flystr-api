@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { sendSignupEmail } from '../sendMail';
 import _stripe from 'stripe';
+import moment from 'moment';
 const stripe = _stripe(process.env.STRIPE_SECRET_KEY);
 
 const testPlanMap = {
@@ -72,6 +73,50 @@ module.exports = {
     await user.save();
 
     res.status(200).json(user);
+  },
+
+  getAdminOverview: async (req, res) => {
+    const totalUsers = await UserModel.count();
+    const oneMonthAgo = moment()
+      .subtract(1, 'month')
+      .toDate();
+    const monthlyActiveUsers = await UserModel.find({
+      updatedAt: { $gte: oneMonthAgo }
+    }).count();
+    const oneDayAgo = moment()
+      .subtract(1, 'day')
+      .toDate();
+    const newUsers = await UserModel.find({
+      createdAt: { $gte: oneDayAgo }
+    }).count();
+    const userList = await UserModel.aggregate([
+      { $sort: { createdAt: -1 } },
+      {
+        $lookup: {
+          from: 'trips',
+          localField: '_id',
+          foreignField: 'user',
+          as: 'trips'
+        }
+      },
+      {
+        $project: {
+          _id: 1,
+          email: 1,
+          createdAt: 1,
+          updatedAt: 1,
+          stripeSubscription: { id: 1 },
+          tripCount: { $size: '$trips' }
+        }
+      }
+    ]);
+
+    return res.status(200).json({
+      totalUsers,
+      monthlyActiveUsers,
+      newUsers,
+      userList
+    });
   },
 
   getProfile: async (req, res) => {
