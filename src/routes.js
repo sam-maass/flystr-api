@@ -27,6 +27,11 @@ router.post(
 router.put('/user', authenticate, UserController.update);
 router.get('/user/refreshToken', authenticate, UserController.refreshToken);
 router.get('/user/profile', authenticate, UserController.getProfile);
+router.get(
+  '/user/adminOverview',
+  authenticateAdmin,
+  UserController.getAdminOverview
+);
 router.get('/user/notifications', authenticate, NotificationController.get);
 router.put(
   '/user/notifications/seen',
