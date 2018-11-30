@@ -20,10 +20,10 @@ jobs:
       - checkout
       - run:
           name: Install Python
-          ? working_directory
+          working_directory:
           command: |
             sudo apt-get -y -qq update
-            sudo apt-get -y -qq install python3.4-dev
+            sudo apt-get -y -qq install python3.7-dev
       # Download and cache dependencies
       - restore_cache:
           keys:
