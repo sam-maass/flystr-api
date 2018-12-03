@@ -11,13 +11,15 @@ export async function findMatchingFlights({
   const tripsQuery = {
     outDate: { $gte: startDate },
     inDate: { $lte: endDate },
-    price: { $lte: budget },
     outOrigin: { $in: origins },
     outDestination: { $in: destinations },
     removed: { $ne: true }
   };
   if (fromDuration >= 0 && fromDuration !== '') {
     tripsQuery.duration = { $gte: fromDuration, $lte: toDuration };
+  }
+  if (budget) {
+    tripsQuery.price = { $lte: budget };
   }
   const matchingFlights = FlightModel.find(tripsQuery);
   return matchingFlights;
