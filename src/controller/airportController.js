@@ -1,10 +1,11 @@
 import AirportModel from '../model/airportModel';
+import slugify from 'slugify';
 
 module.exports = {
   getSuggestions: async (req, res) => {
-    const term = req.query.term;
-    const rx = new RegExp(term, 'i');
-    const airportsByIata = await AirportModel.find({ iata: rx }).limit(2);
+    const term = slugify(req.query.term, ' ');
+    const rx = makeFuzzyRegex(term);
+    const airportsByIata = [];
     const airportsByCity = await AirportModel.find({
       city: rx,
       iata: { $exists: true, $ne: '' }
@@ -20,3 +21,22 @@ module.exports = {
     res.status(200).json(result);
   }
 };
+
+function makeFuzzyRegex(string) {
+  if (!string) {
+    return /^$/;
+  }
+
+  // Escape any potential special characters:
+  const cleansed = string.replace(/\W/g, '\\$&');
+
+  return RegExp(
+    `^${cleansed.replace(
+      // Find every escaped and non-escaped char:
+      /(\\?.)/g,
+      // Replace with fuzzy character matcher:
+      '$1.?'
+    )}.*$`,
+    'i'
+  );
+}
