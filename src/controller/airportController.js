@@ -5,13 +5,17 @@ module.exports = {
   getSuggestions: async (req, res) => {
     const term = slugify(req.query.term, ' ');
     const rx = makeFuzzyRegex(term);
-    const airportsByIata = [];
+    const airportsByIata = await AirportModel.findOne({
+      iata: rx
+    });
+
+    const foundAirportIata = (airportsByIata || {}).iata || ' ';
     const airportsByCity = await AirportModel.find({
       city: rx,
-      iata: { $exists: true, $ne: '' }
+      iata: { $exists: true, $nin: ['', foundAirportIata] }
     }).limit(3);
-
-    const airports = [...airportsByIata, ...airportsByCity];
+    const airports = airportsByIata ? [airportsByIata] : [];
+    airports.push(...airportsByCity);
     const result = airports.map(airport => {
       return {
         label: `${airport.iata} ${airport.city},${airport.country}`,
