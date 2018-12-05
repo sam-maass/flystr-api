@@ -14,7 +14,12 @@ const airportSchema = new Schema({
   altitude: String,
   timezone: String,
   dst: String,
-  tz: String
+  tz: String,
+  altNames: [String],
+  paxDemand: Number,
+  cargoDemand: Number,
+  runwayLength: String,
+  searchableName: String
 });
 
 const AirportModel = mongoose.model('Airport', airportSchema);
