@@ -20,8 +20,6 @@ const limitRemovedDeals = (deals, { limit }) => {
 module.exports = {
   get: async (req, res) => {
     const { activeDeal, region } = req.query;
-    console.log(activeDeal);
-
     if (activeDeal) {
       const deals = await getRelevantDeals(activeDeal);
       const limitedDeals = limitRemovedDeals(deals, { limit: 2 });
