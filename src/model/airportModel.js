@@ -22,6 +22,4 @@ const airportSchema = new Schema({
   searchableName: String
 });
 
-const AirportModel = mongoose.model('Airport', airportSchema);
-
-module.exports = AirportModel;
+export const AirportModel = mongoose.model('Airport', airportSchema);

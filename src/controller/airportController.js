@@ -1,4 +1,4 @@
-import AirportModel from '../model/airportModel';
+import { AirportModel } from '../model/airportModel';
 import slugify from 'slugify';
 
 module.exports = {

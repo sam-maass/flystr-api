@@ -3,6 +3,7 @@ import DealModel from '../model/dealModel';
 import TripModel from '../model/tripModel';
 import UserModel from '../model/userModel';
 import { insertDeal } from '../utils/deals/insertDeal';
+import { AirportModel } from '../model/airportModel';
 
 const limitRemovedDeals = (deals, { limit }) => {
   let removedInResult = 0;
@@ -18,19 +19,42 @@ const limitRemovedDeals = (deals, { limit }) => {
 
 module.exports = {
   get: async (req, res) => {
-    const { activeDeal } = req.query;
+    const { activeDeal, region } = req.query;
+    console.log(activeDeal);
+
     if (activeDeal) {
       const deals = await getRelevantDeals(activeDeal);
       const limitedDeals = limitRemovedDeals(deals, { limit: 2 });
       res.status(200).json(limitedDeals);
     } else {
+      let origins = { $exists: true }; //default search
+      if (region) {
+        const validDepartureAirports = await AirportModel.find({
+          country: { $regex: new RegExp(region.replace('-', '.'), 'i') }
+        });
+        origins = { $in: validDepartureAirports.map(a => a.iata) };
+      }
       const deals = await DealModel.find(
-        {},
+        { origins },
         { exampleFlights: 0, priceHistory: 0 }
       ).sort({ createdAt: -1 });
       const limitedDeals = limitRemovedDeals(deals, { limit: 2 });
       res.status(200).json(limitedDeals);
     }
+  },
+
+  getCountries: async (req, res) => {
+    const origins = await DealModel.aggregate([
+      { $match: { removed: { $ne: true } } },
+      { $unwind: '$origins' },
+      { $group: { _id: '$origins' } }
+    ]);
+    const countries = await AirportModel.aggregate([
+      { $match: { iata: { $in: origins.map(i => i._id) } } },
+      { $group: { _id: '$country' } },
+      { $sort: { _id: 1 } }
+    ]);
+    res.status(200).json({ countries: countries.map(i => i._id) });
   },
 
   getMostRecent: async (req, res) => {
