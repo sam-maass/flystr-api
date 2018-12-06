@@ -4,4 +4,4 @@ import { crawler } from './utils/skyscannerCrawler';
 setInterval(() => {
   crawler('/crawl/trips/all');
   crawler('/crawl/deals/all');
-}, 3 * 60 * 60 * 1000);
+}, 6 * 60 * 60 * 1000);
