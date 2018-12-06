@@ -1,4 +1,4 @@
-import AirportModel from '../../model/airportModel';
+import { AirportModel } from '../../model/airportModel';
 import moment from 'moment';
 export const augmentFlight = async flight => {
   delete flight._id;

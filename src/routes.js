@@ -51,6 +51,7 @@ router.get('/trips/all', authenticateAdmin, TripController.getAllTrips);
 router.post('/deal', authenticateAdmin, DealController.insert);
 router.get('/deal/:dealId', DealController.getOne);
 router.get('/deals', DealController.get);
+router.get('/deals/countries', DealController.getCountries);
 router.get('/recentDeals', DealController.getMostRecent); // Landing Page Deals
 
 router.get('/flights', authenticateAdmin, FlightController.get);
