@@ -26,7 +26,12 @@ const dealSchema = new Schema(
     slug: String,
     currency: String,
     lastChecked: Date,
-    priceLimit: Number
+    priceLimit: Number,
+    priceHistory: [{ date: Date, minPrice: Number }],
+    averagePrice: Number,
+    saving: Number,
+    stDev: Number,
+    rareness: Number
   },
   { timestamps: true }
 );

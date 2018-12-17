@@ -35,7 +35,7 @@ module.exports = {
       const deals = await DealModel.find(
         { origins },
         { exampleFlights: 0, priceHistory: 0 }
-      ).sort({ createdAt: -1 });
+      ).sort({ saving: -1 });
       const limitedDeals = limitRemovedDeals(deals, { limit: 2 });
       res.status(200).json(limitedDeals);
     }
