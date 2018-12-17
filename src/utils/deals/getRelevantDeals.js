@@ -13,7 +13,7 @@ export async function getRelevantDeals(activeDeal) {
     return DealModel.find(
       { removed: { $ne: true } },
       { exampleFlights: 0, priceHistory: 0 }
-    ).sort({ createdAt: -1 });
+    ).sort({ saving: -1 });
   }
   const origins = deal ? deal.origins : [];
   const sameAirportDeals = await getSameOriginDeals(activeDeal, origins);
@@ -35,7 +35,7 @@ async function getOtherDeals(slug, origins) {
       origins: { $nin: origins }
     },
     { exampleFlights: 0, priceHistory: 0 }
-  ).sort({ createdAt: -1 });
+  ).sort({ saving: -1 });
 }
 
 /**
@@ -52,7 +52,7 @@ function getSameOriginDeals(slug, origins) {
       origins: { $in: origins }
     },
     { exampleFlights: 0, priceHistory: 0 }
-  ).sort({ createdAt: -1 });
+  ).sort({ saving: -1 });
 }
 
 /**
