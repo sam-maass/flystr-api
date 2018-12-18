@@ -58,8 +58,7 @@ module.exports = {
   getMostRecent: async (req, res) => {
     const deals = await DealModel.find({ removed: { $ne: true } })
       .limit(3)
-      .sort({ createdAt: -1 })
-      .populate('exampleFlights');
+      .sort({ saving: -1 });
     res.status(200).json(deals);
   },
 
