@@ -4,6 +4,7 @@ import TripModel from '../model/tripModel';
 import UserModel from '../model/userModel';
 import { insertDeal } from '../utils/deals/insertDeal';
 import { AirportModel } from '../model/airportModel';
+import { FlightModel } from '../model/flightModel';
 
 const limitRemovedDeals = (deals, { limit }) => {
   let removedInResult = 0;
@@ -63,20 +64,21 @@ module.exports = {
   },
 
   getOne: async (req, res) => {
-    let deal = await DealModel.findOne({
+    console.time('getOne');
+    const deal = await DealModel.findOne({
       slug: req.params.dealId,
       removed: {
         $ne: true
       }
-    }).populate('exampleFlights');
-    if (!deal) {
-      deal = await DealModel.findOne({
-        _id: req.params.dealId,
-        removed: { $ne: true }
-      }).populate('exampleFlights');
-    }
+    });
+    deal.exampleFlights = await FlightModel.find({
+      outOrigin: { $in: deal.origins },
+      outDestination: { $in: deal.destinations },
+      removed: { $ne: true }
+    });
     if (!deal) return res.status(404).json({ error: 'No Deal found' });
     res.status(200).json(deal);
+    console.timeEnd('getOne');
   },
 
   insert: async (req, res) => {

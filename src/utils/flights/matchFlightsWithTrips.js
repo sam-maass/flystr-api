@@ -1,5 +1,5 @@
 import TripModel from '../../model/tripModel';
-import FlightModel from '../../model/flightModel';
+import { FlightModel } from '../../model/flightModel';
 
 export async function matchFlightsWithTrips(flightIds) {
   const flights = await FlightModel.find({ _id: { $in: flightIds } });

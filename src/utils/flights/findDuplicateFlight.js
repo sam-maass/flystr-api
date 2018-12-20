@@ -1,4 +1,4 @@
-import FlightModel from '../../model/flightModel';
+import { FlightModel } from '../../model/flightModel';
 export async function findDuplicateFlight(flight) {
   const { outDate, inDate, outOrigin, outDestination } = flight;
   const oldFlight = await FlightModel.findOne({
