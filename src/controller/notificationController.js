@@ -26,7 +26,9 @@ module.exports = {
       data: {
         dateOfArrival: Date.now(),
         primaryKey: 1,
-        url: `https://flystr.com/trip/${notification.payload.trip}`
+        url: `https://flystr.com/trip/${
+          notification.payload.trip
+        }?utm_source=price-alert&utm_medium=push-notification`
       }
     };
     res.status(200).json(options);
