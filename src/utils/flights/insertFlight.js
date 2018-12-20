@@ -1,4 +1,4 @@
-import FlightModel from '../../model/flightModel';
+import { FlightModel } from '../../model/flightModel';
 import { findDuplicateFlight } from './findDuplicateFlight';
 import { removeFlightById } from './removeFlightById';
 import { replaceFlightFromDeal } from '../deals/replaceFlightFromDeal';

@@ -1,6 +1,6 @@
 import { insertFlight } from '../utils/flights/insertFlight';
 
-import FlightModel from '../model/flightModel';
+import { FlightModel } from '../model/flightModel';
 
 import { removeFlightById } from '../utils/flights/removeFlightById';
 
