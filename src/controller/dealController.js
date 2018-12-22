@@ -75,7 +75,7 @@ module.exports = {
       outOrigin: { $in: deal.origins },
       outDestination: { $in: deal.destinations },
       removed: { $ne: true }
-    });
+    }).limit(200);
     if (!deal) return res.status(404).json({ error: 'No Deal found' });
     res.status(200).json(deal);
     console.timeEnd('getOne');
