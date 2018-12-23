@@ -76,7 +76,7 @@ module.exports = {
       outDestination: { $in: deal.destinations },
       removed: { $ne: true }
     })
-      .sort({ price: -1 })
+      .sort({ price: 1 })
       .limit(200);
     if (!deal) return res.status(404).json({ error: 'No Deal found' });
     res.status(200).json(deal);
