@@ -8,7 +8,7 @@ import moment from 'moment';
 
 const FREE_USER_TRIP_LIMIT = 2;
 
-module.exports = {
+export default {
   insert: async (req, res) => {
     const user = await UserModel.findById(req.user._id);
     if (!user) {

@@ -23,7 +23,7 @@ const planMap = process.env.STRIPE_SECRET_KEY.includes('live')
   ? livePlanMap
   : testPlanMap;
 
-module.exports = {
+export default {
   premiumSignup: async (req, res) => {
     const { _id: userId } = req.user;
     const { token, selectedPlan } = req.body;
