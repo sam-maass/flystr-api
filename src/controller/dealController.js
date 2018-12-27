@@ -18,7 +18,7 @@ const limitRemovedDeals = (deals, { limit }) => {
   });
 };
 
-module.exports = {
+export default {
   get: async (req, res) => {
     const { activeDeal, region } = req.query;
     if (activeDeal) {

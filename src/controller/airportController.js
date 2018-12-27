@@ -1,7 +1,7 @@
 import { AirportModel } from '../model/airportModel';
 import slugify from 'slugify';
 
-module.exports = {
+export default {
   getSuggestions: async (req, res) => {
     const term = slugify(req.query.term, ' ');
     const rx = makeFuzzyRegex(term);

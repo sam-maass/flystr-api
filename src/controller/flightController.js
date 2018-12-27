@@ -4,7 +4,7 @@ import { FlightModel } from '../model/flightModel';
 
 import { removeFlightById } from '../utils/flights/removeFlightById';
 
-module.exports = {
+export default {
   get: async (req, res) => {
     const flights = await FlightModel.find({
       removed: { $ne: true },
