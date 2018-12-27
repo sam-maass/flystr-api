@@ -20,12 +20,20 @@ const limitRemovedDeals = (deals, { limit }) => {
 
 export default {
   get: async (req, res) => {
-    const { activeDeal, region } = req.query;
+    console.log(req.query);
+
+    const { activeDeal, region, departureDatePartial, duration } = req.query;
+    let deals = [];
+
+    // seperate logic if active deal is set
     if (activeDeal) {
-      const deals = await getRelevantDeals(activeDeal);
+      deals = await getRelevantDeals(activeDeal);
       const limitedDeals = limitRemovedDeals(deals, { limit: 2 });
       res.status(200).json(limitedDeals);
-    } else {
+      return;
+    }
+
+    if (!activeDeal) {
       let origins = { $exists: true }; //default search
       if (region) {
         const validDepartureAirports = await AirportModel.find({
@@ -33,10 +41,52 @@ export default {
         });
         origins = { $in: validDepartureAirports.map(a => a.iata) };
       }
-      const deals = await DealModel.find(
-        { origins },
-        { exampleFlights: 0, priceHistory: 0 }
-      ).sort({ saving: -1 });
+
+      if (!(departureDatePartial || duration)) {
+        deals = await DealModel.find(
+          { origins },
+          { exampleFlights: 0, priceHistory: 0 }
+        ).sort({ saving: -1 });
+      } else {
+        const unwindStage = [
+          { $unwind: { path: '$priceMatrix' } },
+          { $unwind: { path: '$priceMatrix' } }
+        ];
+        const transformPriceMatrixStage = [
+          { $sort: { 'priceMatrix.minPrice': 1 } },
+          {
+            $group: {
+              _id: '$_id',
+              minPrice: { $min: '$priceMatrix.minPrice' },
+              doc: { $first: '$$ROOT' }
+            }
+          },
+          { $replaceRoot: { newRoot: '$doc' } },
+          {
+            $addFields: {
+              minPrice: '$priceMatrix.minPrice',
+              saving: { $divide: ['$priceMatrix.minPrice', '$averagePrice'] }
+            }
+          },
+          { $sort: { saving: 1 } }
+        ];
+        const matchOriginStage = region ? [{ $match: { origins } }] : [];
+        const matchDateStage = departureDatePartial
+          ? [{ $match: { 'priceMatrix.month': departureDatePartial } }]
+          : [];
+        const matchDurationStage = duration
+          ? [{ $match: { 'priceMatrix.duration': duration } }]
+          : [];
+
+        deals = await DealModel.aggregate([
+          ...matchOriginStage,
+          ...unwindStage,
+          ...matchDateStage,
+          ...matchDurationStage,
+          ...transformPriceMatrixStage
+        ]);
+      }
+
       const limitedDeals = limitRemovedDeals(deals, { limit: 2 });
       res.status(200).json(limitedDeals);
     }
