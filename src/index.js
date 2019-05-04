@@ -3,10 +3,28 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import morgan from 'morgan';
 import mongoose from 'mongoose';
+const { ApolloServer, gql } = require('apollo-server-express');
+
+// Construct a schema, using GraphQL schema language
+const typeDefs = gql`
+  type Query {
+    hello: String
+  }
+`;
+
+// Provide resolver functions for your schema fields
+const resolvers = {
+  Query: {
+    hello: () => 'Hello world!'
+  }
+};
+
+const server = new ApolloServer({ typeDefs, resolvers });
 
 const { PORT, MONGO_URL } = process.env;
 
 const app = express();
+server.applyMiddleware({ app });
 app.use(
   morgan('dev', {
     skip(req, res) {
@@ -42,5 +60,9 @@ mongoose
   )
   .catch(e => console.error(e));
 
-app.listen(PORT);
-console.log(`API running on port ${PORT}, mongo connected to ${MONGO_URL}`);
+app.listen({ port: PORT }, () => {
+  console.log(
+    `🚀 Server ready at http://localhost:${PORT}${server.graphqlPath}`
+  );
+  console.log(`API running on port ${PORT}, mongo connected to ${MONGO_URL}`);
+});
