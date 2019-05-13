@@ -3,23 +3,10 @@ import bodyParser from 'body-parser';
 import express from 'express';
 import morgan from 'morgan';
 import mongoose from 'mongoose';
-const { ApolloServer, gql } = require('apollo-server-express');
+import { graphqlSchema } from './graphql/schema';
+const { ApolloServer } = require('apollo-server-express');
 
-// Construct a schema, using GraphQL schema language
-const typeDefs = gql`
-  type Query {
-    hello: String
-  }
-`;
-
-// Provide resolver functions for your schema fields
-const resolvers = {
-  Query: {
-    hello: () => 'Hello world!'
-  }
-};
-
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({ schema: graphqlSchema });
 
 const { PORT, MONGO_URL } = process.env;
 
@@ -54,10 +41,7 @@ app.use(require('./routes'));
 
 mongoose.Promise = global.Promise;
 mongoose
-  .connect(
-    MONGO_URL,
-    { useNewUrlParser: true }
-  )
+  .connect(MONGO_URL, { useNewUrlParser: true })
   .catch(e => console.error(e));
 
 app.listen({ port: PORT }, () => {
