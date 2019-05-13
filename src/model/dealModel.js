@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { composeWithMongoose } from 'graphql-compose-mongoose/node8';
 
 const Schema = mongoose.Schema;
 
@@ -37,5 +38,8 @@ const dealSchema = new Schema(
 );
 
 const DealModel = mongoose.model('Deal', dealSchema);
+
+const customizationOptions = {};
+export const DealTC = composeWithMongoose(DealModel, customizationOptions);
 
 export default DealModel;
