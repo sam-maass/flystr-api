@@ -7,6 +7,7 @@ import DealController from './controller/dealController';
 import FlightController from './controller/flightController';
 import AirportController from './controller/airportController';
 import NotificationController from './controller/notificationController';
+import RouteController from './controller/routeController';
 const {
   authenticate,
   validateToken,
@@ -59,5 +60,10 @@ router.post('/flight', authenticateAdmin, FlightController.insert);
 router.delete('/flight/:flightId', authenticateAdmin, FlightController.delete);
 
 router.get('/airports', authenticate, AirportController.getSuggestions);
+
+router.get('/routes', authenticateAdmin, RouteController.get);
+router.post('/routes', authenticateAdmin, RouteController.addMultiple);
+router.delete('/route', authenticateAdmin, RouteController.delete);
+router.put('/route', authenticateAdmin, RouteController.update);
 
 module.exports = router;
