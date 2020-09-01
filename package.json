@@ -25,7 +25,7 @@
     "body-parser": "^1.19.0",
     "express": "^4.16.4",
     "express-session": "^1.16.1",
-    "file-loader": "^3.0.1",
+    "file-loader": "^6.1.0",
     "google-auth-library": "^3.1.2",
     "graphql": "^14.2.1",
     "graphql-compose": "^7.0.1",
