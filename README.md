@@ -1,3 +1,8 @@
+# flystr-api
 
-
-[![Greenkeeper badge](https://badges.greenkeeper.io/sam-maass/flystr-api.svg?token=8d945c82609930ac846e9a7d48525dab4ced09ab74ad418a0f063e6c9976033c&ts=1507921977729)](https://greenkeeper.io/)
+GraphQL API server for **flystr / tripfixed**, a flight-deal discovery product. Built with
+Apollo Server on Express and backed by MongoDB (Mongoose), it is the system of record for
+users, deals, trips and payments — exposing crawled fare data to the web app via a single
+GraphQL contract, handling Google OAuth + JWT auth, and processing Stripe checkout. It is
+one of five services in the flystr architecture; for the full multi-repo overview see the
+pinned [**flystr**](https://github.com/sam-maass/flystr) repository.
